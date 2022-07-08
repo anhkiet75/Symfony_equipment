@@ -14,7 +14,7 @@
           <node kind="schema">
             <name qname="@" />
             <name qname="chair_management" />
-            <name qname="movies" />
+            <name qname="equipment_tft" />
           </node>
         </introspection-scope>
       </schema-mapping>

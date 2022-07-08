@@ -38,9 +38,10 @@ class Assign
     private $user_id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=equipment::class, inversedBy="assigns")
+     * @ORM\ManyToOne(targetEntity=Equipment::class, inversedBy="assigns")
      */
     private $equipment_id;
+
 
     public function getId(): ?int
     {
@@ -95,12 +96,12 @@ class Assign
         return $this;
     }
 
-    public function getEquipmentId(): ?equipment
+    public function getEquipmentId(): ?Equipment
     {
         return $this->equipment_id;
     }
 
-    public function setEquipmentId(?equipment $equipment_id): self
+    public function setEquipmentId(?Equipment $equipment_id): self
     {
         $this->equipment_id = $equipment_id;
 

@@ -121,7 +121,7 @@ class Equipment
     }
 
     /**
-     * @return Collection|Assign[]
+     * @return Collection<int, Assign>
      */
     public function getAssigns(): Collection
     {
@@ -149,4 +149,5 @@ class Equipment
 
         return $this;
     }
+
 }

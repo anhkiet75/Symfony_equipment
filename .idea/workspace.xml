@@ -23,25 +23,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd9447e9-49c8-415d-9fb8-e1b8c448ce8e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Entity/Assign.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/Category.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/ChoHA.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/Equipment.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/symfony-6-course.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/symfony-6-course.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/DataFixtures/UserFixtures.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/22081788-a808-4982-9dcc-37de8663bcd0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/22081788-a808-4982-9dcc-37de8663bcd0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20220106205419.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/MoviesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/MoviesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/MovieFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/MovieFormType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/movies/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/movies/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/movies/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/movies/show.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20220708083751.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20220708084217.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20220708084706.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20220708085800.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20220708091921.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20220708092137.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/MoviesController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Actor.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Assign.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Assign.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/ChoHA.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Equipment.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Equipment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Movie.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ActorRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/ChoHARepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/MovieRepository.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +60,9 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -147,8 +151,13 @@
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Git.Branch.Popup.ShowAllRemotes": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/Symfony Project/symfony-6-course/src/DataFixtures",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "editing.templates"
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -156,6 +165,11 @@
     ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Symfony Project\symfony-6-course\src\DataFixtures" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -166,6 +180,7 @@
       <updated>1641501433492</updated>
       <workItem from="1641501435915" duration="673000" />
       <workItem from="1642347866895" duration="690000" />
+      <workItem from="1657276077654" duration="1949000" />
     </task>
     <servers />
   </component>

@@ -42,11 +42,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $roles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Assign::class, mappedBy="user_id")
+     */
+    private $assigns;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $gender;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $birthdate;
 
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+        $this->assigns = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -136,6 +150,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeRole(Role $role): self
     {
         $this->roles->removeElement($role);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Assign>
+     */
+    public function getAssigns(): Collection
+    {
+        return $this->assigns;
+    }
+
+    public function addAssign(Assign $assign): self
+    {
+        if (!$this->assigns->contains($assign)) {
+            $this->assigns[] = $assign;
+            $assign->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssign(Assign $assign): self
+    {
+        if ($this->assigns->removeElement($assign)) {
+            // set the owning side to null (unless already changed)
+            if ($assign->getUserId() === $this) {
+                $assign->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isGender(): ?bool
+    {
+        return $this->gender;
+    }
+
+    public function setGender(bool $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
 
         return $this;
     }
