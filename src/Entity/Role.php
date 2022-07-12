@@ -63,7 +63,7 @@ class Role
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
-            $user->addRole($this);
+            $user->addRoles($this);
         }
 
         return $this;
@@ -72,7 +72,7 @@ class Role
     public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
-            $user->removeRole($this);
+            $user->removeRoles($this);
         }
 
         return $this;

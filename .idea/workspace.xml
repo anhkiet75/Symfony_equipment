@@ -23,26 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd9447e9-49c8-415d-9fb8-e1b8c448ce8e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/DataFixtures/UserFixtures.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/22081788-a808-4982-9dcc-37de8663bcd0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/22081788-a808-4982-9dcc-37de8663bcd0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20220708083751.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20220708084217.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20220708084706.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20220708085800.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20220708091921.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20220708092137.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/MoviesController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Actor.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Assign.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Assign.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/ChoHA.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Equipment.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Equipment.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Movie.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ActorRepository.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ChoHARepository.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/MovieRepository.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +161,7 @@
       <updated>1641501433492</updated>
       <workItem from="1641501435915" duration="673000" />
       <workItem from="1642347866895" duration="690000" />
-      <workItem from="1657276077654" duration="1949000" />
+      <workItem from="1657276077654" duration="4621000" />
     </task>
     <servers />
   </component>

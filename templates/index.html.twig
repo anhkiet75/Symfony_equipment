@@ -1,11 +1,103 @@
-{% extends "base.html.twig" %}
+<!DOCTYPE html>
+<html>
 
-{% block title %}
-    Movies Page
-{% endblock %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title  %} Equipment Management {% endblock %}</title> 
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.css" rel="stylesheet" />
 
-{% block body %}
-    <h1 class="bg-blue-500 font-4xl">
-        Wohoo.
-    </h1>
-{% endblock %}
+      <!-- Custom styles -->
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/autocomplete.css">
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+    crossorigin="anonymous"></script> -->
+
+   
+</head>
+
+<body>
+
+
+
+</body>
+  <!--Main Navigation-->
+  <header>
+  
+    <!-- Navbar -->
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+      <!-- Container wrapper -->
+      <div class="container-fluid">
+        <!-- Toggle button -->
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#sidebarMenu"
+          aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="/">
+          <img src="https://picsum.photos/id/238/300/300" height="30" alt="" loading="lazy" />
+          <h3 class="mt-1 ms-1">Equipment Management</h3>
+        </a>
+
+        <ul class="navbar-nav ms-auto d-flex flex-row">
+          <li class="nav-item dropdown">
+          </li>
+          <!-- Avatar -->
+          {% if app.user %}
+          <h4 class="mt-1">
+            {{ app.user.name }}
+          </h4>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#"
+              id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+              <img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" class="rounded-circle" height="22"
+                alt="" loading="lazy" />
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="#">My profile</a></li>
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <li><a class="dropdown-item" href="/logout">Logout</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        
+
+    
+          <li class="d-flex">
+            <button class="btn btn-outline-primary me-1">
+              <a href="/login">Login</a>
+            </button>
+            <button class="btn btn-outline-primary">
+              <a href="/register">Register</a>
+            </button>
+          </li>
+
+        </ul>
+      </div>
+      <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+  </header>
+  <!--Main Navigation-->
+
+     <!--Main layout-->
+  <main style="margin-top: 70px;" >
+    <div class="container-fluid ma-0 pa-0">
+       {% block body %}{% endblock %}
+    </div>
+  </main>
+  <!--Main layout-->
+   <!-- MDB -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.2.0/mdb.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+    {% block scripts %}
+    {% endblock %}
+</html>

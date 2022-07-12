@@ -81,7 +81,7 @@ class Category
     {
         if (!$this->equipments->contains($equipment)) {
             $this->equipments[] = $equipment;
-            $equipment->setCategoryId($this);
+            $equipment->setCategory($this);
         }
 
         return $this;
@@ -91,11 +91,16 @@ class Category
     {
         if ($this->equipments->removeElement($equipment)) {
             // set the owning side to null (unless already changed)
-            if ($equipment->getCategoryId() === $this) {
-                $equipment->setCategoryId(null);
+            if ($equipment->getCategory() === $this) {
+                $equipment->setCategory(null);
             }
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->name;
     }
 }

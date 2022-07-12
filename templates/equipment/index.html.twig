@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Equipment index
+{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center">
+	<h1>Equipment index</h1>
+	<a href="{{ path('app_equipment_new') }}" class="btn btn-outline-dark py-auto" style="width: 130px;">
+    Create
+	</a>
+</div>
+	<table class="table">
+		<thead class="table-dark">
+			<tr>
+				<th>Id</th>
+				<th>Serial_number</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Status</th>
+				<th>User</th>
+				<th>Category</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for equipment in equipment %}
+				<tr>
+					<td>{{ equipment.id }}</td>
+					<td>{{ equipment.serialNumber }}</td>
+					<td>{{ equipment.name }}</td>
+					<td>{{ equipment.description }}</td>
+					<td>{{ equipment.status }}</td>
+					<td>{{ equipment.assigns}}
+					</td>
+					<td>{{ equipment.category.name }}</td>
+					<td>
+						<a href="{{ path('app_equipment_show', {'id': equipment.id}) }}">
+							<i class="fa-solid fa-eye" style="color: #00a0f0"></i>
+							SHOW</a>
+						<a href="{{ path('app_equipment_edit', {'id': equipment.id}) }} ">
+							<i class="far fa-edit fa-fw editor" style="color: #f00000"></i>
+							EDIT</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}	
+		</tbody>
+	</table>
+
+
+{% endblock %}

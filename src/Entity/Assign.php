@@ -33,14 +33,14 @@ class Assign
     private $date_return;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="assigns")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="assigns", fetch= "EAGER")
      */
-    private $user_id;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Equipment::class, inversedBy="assigns")
      */
-    private $equipment_id;
+    private $equipment;
 
 
     public function getId(): ?int
@@ -84,27 +84,28 @@ class Assign
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user_id): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user_id;
 
         return $this;
     }
 
-    public function getEquipmentId(): ?Equipment
+    public function getEquipment(): ?Equipment
     {
-        return $this->equipment_id;
+        return $this->equipment;
     }
 
-    public function setEquipmentId(?Equipment $equipment_id): self
+    public function setEquipment(?Equipment $equipment_id): self
     {
-        $this->equipment_id = $equipment_id;
+        $this->equipment = $equipment_id;
 
         return $this;
     }
+
 }

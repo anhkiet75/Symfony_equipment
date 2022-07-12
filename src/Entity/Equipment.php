@@ -43,10 +43,10 @@ class Equipment
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="equipments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $category_id;
+    private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=Assign::class, mappedBy="equipment_id")
+     * @ORM\OneToMany(targetEntity=Assign::class, mappedBy="equipment")
      */
     private $assigns;
 
@@ -108,14 +108,14 @@ class Equipment
         return $this;
     }
 
-    public function getCategoryId(): ?Category
+    public function getCategory(): ?Category
     {
-        return $this->category_id;
+        return $this->category;
     }
 
-    public function setCategoryId(?Category $category_id): self
+    public function setCategory(?Category $category): self
     {
-        $this->category_id = $category_id;
+        $this->category = $category;
 
         return $this;
     }
@@ -132,7 +132,7 @@ class Equipment
     {
         if (!$this->assigns->contains($assign)) {
             $this->assigns[] = $assign;
-            $assign->setEquipmentId($this);
+            $assign->setEquipment($this);
         }
 
         return $this;
@@ -142,12 +142,12 @@ class Equipment
     {
         if ($this->assigns->removeElement($assign)) {
             // set the owning side to null (unless already changed)
-            if ($assign->getEquipmentId() === $this) {
-                $assign->setEquipmentId(null);
+            if ($assign->getEquipment() === $this) {
+                $assign->setEquipment(null);
             }
         }
 
         return $this;
-    }
+    }   
 
 }
