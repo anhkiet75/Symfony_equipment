@@ -9,16 +9,21 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\ObjectManager;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Faker\Generator;
 use Faker\Factory;
+
 
 /**
  * @ORM\Entity(repositoryClass=EquipmentRepository::class)
  * @ORM\HasLifecycleCallbacks()
- */
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+*/
+
 class Equipment
 {
     use TimestampableEntity;
+    use SoftDeleteableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -135,19 +140,19 @@ class Equipment
         return $this->assigns;
     }
 
-    public function getUser()
-    {
+    // public function getUser()
+    // {
      
-        $username = $this->roles;
-        $roles = [];
-        foreach ($userRoles as $userRole) {
-            $roles[] = $userRole->getName();
-        }
+    //     $username = $this->roles;
+    //     $roles = [];
+    //     foreach ($userRoles as $userRole) {
+    //         $roles[] = $userRole->getName();
+    //     }
 
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-        return array_unique($roles);
-    }
+    //     // guarantee every user at least has ROLE_USER
+    //     $roles[] = 'ROLE_USER';
+    //     return array_unique($roles);
+    // }
 
     public function getUsername(): array
     {

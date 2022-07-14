@@ -20,12 +20,6 @@ class EquipmentType extends AbstractType
     {
         
         $builder
-            ->add('serial_number',TextType::class,[
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Enter serial_number...'
-                ]
-            ])
             ->add('name',TextType::class,[
                 'attr' => [
                     'class' => 'form-control',
@@ -54,6 +48,7 @@ class EquipmentType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'class' => User::class,
+                'mapped' => false,
                 'choice_label' => 'name',
             ])
             ->add('category',EntityType::class,[
