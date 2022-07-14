@@ -2,20 +2,27 @@
 
 namespace App\Entity;
 
+use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\ObjectManager;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -39,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $roles;
     /**
-     * @ORM\OneToMany(targetEntity=Assign::class, mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity=Assign::class, mappedBy="user")
      */
     private $assigns;
     /**
@@ -60,6 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = new ArrayCollection();
         $this->assigns = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,19 +94,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+
     public function getRoles(): array
     {
         $userRoles = $this->roles;
-        $role = [];
-        foreach ($userRoles as $userRole){
-            $role[] = $userRole->getName();
-         }
+        $roles = [];
+        foreach ($userRoles as $userRole) {
+            $roles[] = $userRole->getName();
+        }
 
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
+
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -126,18 +135,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-    // public function addRole(Role $role): self
-    // {
-    //     if (!$this->roles->contains($role)) {
-    //         $this->roles[] = $role;
-    //     }
-    //     return $this;
-    // }
-    // public function removeRole(Role $role): self
-    // {
-    //     $this->roles->removeElement($role);
-    //     return $this;
-    // }
+
+    public function addRole(Role $role): self
+    {
+        if ($this->roles && !$this->roles->contains($role)) {
+            $this->roles[] = $role;
+        }
+        return $this;
+    }
+    public function removeRole(Role $role): self
+    {
+        $this->roles->removeElement($role);
+        return $this;
+    }
     /**
      * @return Collection<int, Assign>
      */
@@ -151,7 +161,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->assigns[] = $assign;
             $assign->setUser($this);
         }
-
         return $this;
     }
     public function removeAssign(Assign $assign): self
@@ -196,5 +205,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->name = $name;
 
         return $this;
+    }
+
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setValue(): void
+    {
     }
 }

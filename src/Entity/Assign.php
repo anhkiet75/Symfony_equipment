@@ -4,12 +4,14 @@ namespace App\Entity;
 
 use App\Repository\AssignRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=AssignRepository::class)
  */
 class Assign
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -20,7 +22,7 @@ class Assign
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $data_assign;
+    private $date_assign;
 
     /**
      * @ORM\Column(type="date", nullable=true)
@@ -48,14 +50,14 @@ class Assign
         return $this->id;
     }
 
-    public function getDataAssign(): ?\DateTimeInterface
+    public function getDateAssign(): ?\DateTimeInterface
     {
-        return $this->data_assign;
+        return $this->date_assign;
     }
 
-    public function setDataAssign(?\DateTimeInterface $data_assign): self
+    public function setDateAssign(?\DateTimeInterface $date_assign): self
     {
-        $this->data_assign = $data_assign;
+        $this->date_assign = $date_assign;
 
         return $this;
     }
@@ -92,7 +94,6 @@ class Assign
     public function setUser(?User $user_id): self
     {
         $this->user = $user_id;
-
         return $this;
     }
 

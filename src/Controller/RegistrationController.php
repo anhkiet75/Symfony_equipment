@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,8 +14,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RegistrationController extends AbstractController
 {
+    private $em;
+    private $userPasswordHasher;
+    public function __construct(UserPasswordHasherInterface $userPasswordHasher,EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+        $this->userPasswordHasher = $userPasswordHasher;
+    }
+
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -23,19 +32,22 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-            $userPasswordHasher->hashPassword(
+            $this->userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
+            $this->em->persist($user);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $role = $this->em->getRepository(Role::class)->findOneBy([
+                'name' => 'ROLE_USER'
+            ]);
+            $user->addRole($role);
+            $this->em->flush();
             // do anything else you need here, like send an email
-
             return $this->redirectToRoute('home');
         }
-
+        
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);

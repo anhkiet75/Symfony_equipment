@@ -6,12 +6,19 @@ use App\Repository\EquipmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\ObjectManager;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Faker\Generator;
+use Faker\Factory;
 
 /**
  * @ORM\Entity(repositoryClass=EquipmentRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Equipment
 {
+    use TimestampableEntity;
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -20,7 +27,7 @@ class Equipment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $serial_number;
 
@@ -128,6 +135,27 @@ class Equipment
         return $this->assigns;
     }
 
+    public function getUser()
+    {
+     
+        $username = $this->roles;
+        $roles = [];
+        foreach ($userRoles as $userRole) {
+            $roles[] = $userRole->getName();
+        }
+
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+        return array_unique($roles);
+    }
+
+    public function getUsername(): array
+    {
+        $username = $this->assigns->getValues();    
+        return $username;
+        // return $username;
+    }
+
     public function addAssign(Assign $assign): self
     {
         if (!$this->assigns->contains($assign)) {
@@ -149,5 +177,15 @@ class Equipment
 
         return $this;
     }   
+
+    protected $faker;
+    /**
+     * @ORM\PrePersist
+     */
+    public function setSerialNumberValue(): void
+    {  
+        $this->faker = Factory::create();
+        $this->serial_number = $this->faker->ean8;
+    }
 
 }

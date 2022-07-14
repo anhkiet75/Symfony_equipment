@@ -14,31 +14,40 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/equipment')]
 class EquipmentController extends AbstractController
 {
-    #[Route('/', name: 'app_equipment_index', methods: ['GET'])]
-    public function index(EquipmentRepository $equipmentRepository): Response
+    private $em;
+    private $equipmentRepository;
+    function __construct(EntityManagerInterface $em, EquipmentRepository $equipmentRepository)
     {
-        dd( $equipmentRepository->findAll()[0]->getAssigns()->getValues()[0]->getUser());
+        $this->em = $em;
+        $this->equipmentRepository = $equipmentRepository;
+    }
+
+    #[Route('/', name: 'app_equipment_index', methods: ['GET'])]
+    public function index(): Response
+    {
+        // dd( $equipmentRepository->findAll()[0]->getAssigns()->getValues()[0]->getUser());
+        $equipments = $this->equipmentRepository->findAll();
         return $this->render('equipment/index.html.twig', [
-            'equipment' => $equipmentRepository->findAll(), 
+            'equipments' => $equipments,
         ]);
     }
 
     #[Route('/new', name: 'app_equipment_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request): Response
     {
-        $equipment = new Equipment();
-        $form = $this->createForm(EquipmentType::class, $equipment);
+        $equipments = new Equipment();
+        $form = $this->createForm(EquipmentType::class, $equipments);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($equipment);
-            $entityManager->flush();
+            $this->em->persist($equipments);
+            $this->em->flush();
 
             return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('equipment/new.html.twig', [
-            'equipment' => $equipment,
+            'equipments' => $equipments,
             'form' => $form,
         ]);
     }
@@ -47,34 +56,37 @@ class EquipmentController extends AbstractController
     public function show(Equipment $equipment): Response
     {
         return $this->render('equipment/show.html.twig', [
-            'equipment' => $equipment,
+            'equipments' => $equipment,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_equipment_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Equipment $equipment, EntityManagerInterface $entityManager): Response
+    public function edit($id,Request $request): Response
     {
+        $equipment = $this->equipmentRepository->find($id);
+
         $form = $this->createForm(EquipmentType::class, $equipment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('equipment/edit.html.twig', [
-            'equipment' => $equipment,
+            'equipments' => $equipment,
             'form' => $form,
         ]);
     }
 
     #[Route('/{id}', name: 'app_equipment_delete', methods: ['POST'])]
-    public function delete(Request $request, Equipment $equipment, EntityManagerInterface $entityManager): Response
+    public function delete($id, Request $request): Response
     {
+        $equipment = $this->equipmentRepository->find($id);
         if ($this->isCsrfTokenValid('delete'.$equipment->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($equipment);
-            $entityManager->flush();
+            $this->em->remove($equipment);
+            $this->em->flush(); 
         }
 
         return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);

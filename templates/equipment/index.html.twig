@@ -24,15 +24,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for equipment in equipment %}
+			{% for equipment in equipments %}
 				<tr>
 					<td>{{ equipment.id }}</td>
 					<td>{{ equipment.serialNumber }}</td>
 					<td>{{ equipment.name }}</td>
 					<td>{{ equipment.description }}</td>
 					<td>{{ equipment.status }}</td>
-					<td>{{ equipment.assigns}}
-					</td>
+					<td>
+					{% if equipment.username %}
+					 	{{equipment.username[0].user.name}}
+					{% else %}
+					    <span class="text-danger">
+							Not assign
+						</span>
+					{% endif  %}
+ 					</td>
 					<td>{{ equipment.category.name }}</td>
 					<td>
 						<a href="{{ path('app_equipment_show', {'id': equipment.id}) }}">

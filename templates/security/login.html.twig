@@ -9,6 +9,27 @@
 			{% if error %}
 				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 			{% endif %}
+
+		{% for message in app.flashes('note') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+		
+
+		<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="toast-header">
+			<img src="..." class="rounded me-2" alt="...">
+			<strong class="me-auto">Bootstrap</strong>
+			<small>11 mins ago</small>
+			<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+		</div>
+		<div class="toast-body">
+			Hello, world! This is a toast message.
+		</div>
+		</div>
+
 			<div class="row mb-3">
 				<label for="email" class="col-md-4 col-form-label text-md-end">Email Address</label>
 
@@ -55,8 +76,7 @@
 
 	</div>
 
-	<script lang="javascript">
-	        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
 
 {% endblock %}

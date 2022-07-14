@@ -3,8 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Category;
+use App\Entity\User;
 use App\Entity\Equipment;
+use App\Entity\Assign;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -35,11 +38,23 @@ class EquipmentType extends AbstractType
                     'placeholder' => 'Enter description'
                 ]
             ])
-            ->add('status',TextType::class,[
+            ->add('status',ChoiceType::class,[
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Enter status...'
+                ],
+                'choices' => [
+                    'IN_USE' => 'IN_USE',
+                    'AVAILABLE' => 'AVAILABLE',
+                    'BROKEN' => 'BROKEN'
                 ]
+            ])
+            ->add('user',EntityType::class,[
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'class' => User::class,
+                'choice_label' => 'name',
             ])
             ->add('category',EntityType::class,[
                 'attr' => [
