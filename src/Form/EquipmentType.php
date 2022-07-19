@@ -23,8 +23,9 @@ class EquipmentType extends AbstractType
             ->add('name',TextType::class,[
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Enter name...'
-                ]
+                    'placeholder' => 'Enter name...',
+                ],
+                'required' => false
             ])
             ->add('description',TextType::class,[
                 'attr' => [
@@ -42,14 +43,6 @@ class EquipmentType extends AbstractType
                     'AVAILABLE' => 'AVAILABLE',
                     'BROKEN' => 'BROKEN'
                 ]
-            ])
-            ->add('user',EntityType::class,[
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'class' => User::class,
-                'mapped' => false,
-                'choice_label' => 'name',
             ])
             ->add('category',EntityType::class,[
                 'attr' => [

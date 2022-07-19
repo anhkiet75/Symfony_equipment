@@ -91,9 +91,9 @@ class Assign
         return $this->user;
     }
 
-    public function setUser(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user = $user_id;
+        $this->user = $user;
         return $this;
     }
 

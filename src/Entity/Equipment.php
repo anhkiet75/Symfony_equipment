@@ -12,8 +12,8 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Faker\Generator;
 use Faker\Factory;
-
-
+use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=EquipmentRepository::class)
  * @ORM\HasLifecycleCallbacks()
@@ -38,6 +38,7 @@ class Equipment
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
 
@@ -140,25 +141,20 @@ class Equipment
         return $this->assigns;
     }
 
-    // public function getUser()
-    // {
-     
-    //     $username = $this->roles;
-    //     $roles = [];
-    //     foreach ($userRoles as $userRole) {
-    //         $roles[] = $userRole->getName();
-    //     }
+    public function getLastUser()
+    {
+        $criteria = Criteria::create()
+        ->orderBy(['updatedAt' => 'DESC'])
+        ->setMaxResults(1);
 
-    //     // guarantee every user at least has ROLE_USER
-    //     $roles[] = 'ROLE_USER';
-    //     return array_unique($roles);
-    // }
+        $result = $this->assigns->matching($criteria);
+        return $result->isEmpty() ? null : $result->first()->getUser();
+    }
 
     public function getUsername(): array
     {
         $username = $this->assigns->getValues();    
         return $username;
-        // return $username;
     }
 
     public function addAssign(Assign $assign): self

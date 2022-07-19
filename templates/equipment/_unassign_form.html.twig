@@ -1,0 +1,7 @@
+<form method="post" action="{{ path('app_equipment_unassign', {'id': equipment.id}) }}" onsubmit="return confirm('Are you sure you want to Unassign this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('unassign' ~ equipment.id) }}">
+    <button class="btn btn  btn-dark mt-2"  style="width: 130px">
+    <i class="fa-solid fa-user-slash" ></i>
+		UNASSIGN
+    </button>
+</form>
