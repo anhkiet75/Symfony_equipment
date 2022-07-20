@@ -8,7 +8,7 @@ use App\Repository\EquipmentRepository;
 use App\Repository\UserRepository;
 use App\Repository\AssignRepository;
 
-use App\Form\EquipmentType;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,16 +19,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class EquipmentService extends AbstractController
 {
+    private $userRepository;
     private $assignRepository;
     private $equipmentRepository;
-    private $userRepository;
     private $session;
     private $validator; 
     
     public function __construct(UserRepository $userRepository, AssignRepository $assignRepository,EquipmentRepository $equipmentRepository,RequestStack  $session,ValidatorInterface $validator) {
-        $this->equipmentRepository = $equipmentRepository;
-        $this->assignRepository = $assignRepository;
+
         $this->userRepository = $userRepository;
+        $this->assignRepository = $assignRepository;
+        $this->equipmentRepository = $equipmentRepository;
         $this->session = $session->getSession();
         $this->validator = $validator;
     }
@@ -39,6 +40,10 @@ class EquipmentService extends AbstractController
 
     public function findOne($id) {
         return $this->equipmentRepository->findOne();
+    }
+
+    public function getHistory(Equipment $entity) {
+        return $this->equipmentRepository->getHistory($entity);
     }
 
     public function create(Request $request,$form) {

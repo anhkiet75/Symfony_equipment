@@ -27,6 +27,10 @@ class EquipmentRepository extends ServiceEntityRepository
         return $this->find($id);
     }
 
+    public function getHistory(Equipment $entity) {
+        return $entity->getAssigns();
+    }
+
     public function add(Equipment $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);

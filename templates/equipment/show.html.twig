@@ -30,6 +30,27 @@
 			</tr>
 		</tbody>
 	</table>
+	<h3>History</h3>
+	<table class="table">
+		 <thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Name</th>
+				<th scope="col">Date Assign</th>
+				<th scope="col">Due Date</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for history in histories %}
+			<tr>
+				<th scope="row">{{loop.index}}</th>
+				<td>{{history.user.name}}</td>
+				<td>{{history.dateassign|date('d-m-Y')}}</td>
+				<td>{{history.duedate|date('d-m-Y')}}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 	<a href="{{ path('app_equipment_index') }}" class="btn btn-dark mt-2 px-0" style="width: 130px">
 		<i class="fa-solid fa-caret-left"></i>
 		Back to list</a>

@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Classes\Constants;
 use App\Entity\Assign;
 use App\Service\EquipmentService;
+use App\Service\UserService;
 use App\Repository\EquipmentRepository;
 use App\Repository\AssignRepository;
 use App\Repository\UserRepository;
@@ -35,6 +36,7 @@ class EquipmentController extends AbstractController
     , UserRepository $userRepository
     , AssignRepository $assignRepository
     , EquipmentService $equipmentService
+    , UserService $userService
     , RequestStack  $session
     )
 
@@ -45,6 +47,7 @@ class EquipmentController extends AbstractController
         $this->assignRepository = $assignRepository;
 
         $this->equipmentService = $equipmentService;
+        $this->userService = $userService;
         $this->session = $session->getSession();
     }
 
@@ -54,7 +57,7 @@ class EquipmentController extends AbstractController
         // $equipments = $this->equipmentRepository->findAll();
         $equipments = $this->equipmentService->getAll();
 
-        $users = $this->userRepository->findAll();
+        $users = $this->userService->getAll();
         $success = $this->session->get('success', []);
         $error = $this->session->get('failed', []);
         
@@ -89,8 +92,10 @@ class EquipmentController extends AbstractController
     #[Route('/{id}', name: 'app_equipment_show', methods: ['GET'])]
     public function show(Equipment $equipment): Response
     {
+        $history = $this->equipmentService->getHistory($equipment);
         return $this->render('equipment/show.html.twig', [
             'equipments' => $equipment,
+            'histories' => $history,
         ]);
     }
 
