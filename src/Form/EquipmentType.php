@@ -25,24 +25,16 @@ class EquipmentType extends AbstractType
                     'class' => 'form-control',
                     'placeholder' => 'Enter name...',
                 ],
-                'required' => false
+                'required' => false,
+                'empty_data' => ''
             ])
             ->add('description',TextType::class,[
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Enter description'
-                ]
-            ])
-            ->add('status',ChoiceType::class,[
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Enter status...'
                 ],
-                'choices' => [
-                    'IN_USE' => 'IN_USE',
-                    'AVAILABLE' => 'AVAILABLE',
-                    'BROKEN' => 'BROKEN'
-                ]
+                'required' => false,
+                'empty_data' => ''
             ])
             ->add('category',EntityType::class,[
                 'attr' => [

@@ -9,6 +9,32 @@
 
 		{{ include('equipment/_form.html.twig') }}
 
-		<a href="{{ path('app_equipment_index') }}" class="btn btn-dark mt-2" style="width: 130px">Back to list</a>
 	</div>
+{% endblock %}
+
+{% block validate %}
+	<script>
+		$(function() {
+		console.log('hello')
+		$("form[name='equipment']").validate({
+			rules: {
+			'equipment[name]': "required",
+			'equipment[description]': "required",
+			},
+			messages: {
+				'equipment[name]': "Please enter equipment name",
+				'equipment[description]': "Please enter equipment description",
+			},
+			submitHandler: function(form) {
+				form.submit();
+			}
+			});
+		});
+	</script>
+	<style>
+		label.error {
+			color: red;
+			border-color: #ebccd1;
+		}
+	</style>
 {% endblock %}

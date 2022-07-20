@@ -44,11 +44,13 @@ class Equipment
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices = {"IN_USE", "AVAILABLE"}, message = "Choose a valid status.")
      */
     private $status;
 
@@ -149,6 +151,16 @@ class Equipment
 
         $result = $this->assigns->matching($criteria);
         return $result->isEmpty() ? null : $result->first()->getUser();
+    }
+
+    public function getLastAssign()
+    {
+        $criteria = Criteria::create()
+        ->orderBy(['updatedAt' => 'DESC'])
+        ->setMaxResults(1);
+
+        $result = $this->assigns->matching($criteria);
+        return $result->isEmpty() ? null : $result->first();
     }
 
     public function getUsername(): array

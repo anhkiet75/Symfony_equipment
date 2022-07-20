@@ -8,15 +8,42 @@
 	<div class="mx-auto d-flex flex-column  align-items-center">
 		<h1>Edit Equipment</h1>
 
-		{{ include('equipment/_form.html.twig', {'button_label': 'Update'}) }}
+			{{ include('equipment/_form.html.twig', {'button_label': 'Update'}) }}
 		<div class="mt-2">
 			{{ include('equipment/_delete_form.html.twig') }}
 		</div>
-		<div class="mt-2">
+		{# <div class="mt-2">
 			<a href="{{ path('app_equipment_index') }}" class="btn btn-dark px-0" style="width: 130px">
 				<i class="fa-solid fa-caret-left"></i>
 				Back to list</a>
-		</div>
+		</div> #}
 
 	</div>
+{% endblock %}
+
+{% block validate %}
+	<script>
+		$(function() {
+		console.log('hello')
+		$("form[name='equipment']").validate({
+			rules: {
+			'equipment[name]': "required",
+			'equipment[description]': "required",
+			},
+			messages: {
+				'equipment[name]': "Please enter equipment name",
+				'equipment[description]': "Please enter equipment description",
+			},
+			submitHandler: function(form) {
+				form.submit();
+			}
+			});
+		});
+	</script>
+	<style>
+		label.error {
+			color: red;
+			border-color: #ebccd1;
+		}
+	</style>
 {% endblock %}

@@ -48,6 +48,7 @@ class EquipmentController extends AbstractController
     public function new(Request $request): Response
     {
         $equipments = new Equipment();
+        $equipments->setStatus(Constants::STATUS_AVAILABLE);
         $form = $this->createForm(EquipmentType::class, $equipments);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,7 +79,6 @@ class EquipmentController extends AbstractController
 
         $form = $this->createForm(EquipmentType::class, $equipment);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
 
@@ -109,7 +109,7 @@ class EquipmentController extends AbstractController
         $equipment = $this->equipmentRepository->find($id);
         $user_id = $request->request->get('user_id');
         $user = $this->userRepository->find($user_id);
-        if ($this->isCsrfTokenValid('assign'.$equipment->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('assign', $request->request->get('_token'))) {
             $assign = new Assign();
             $assign->setUser($user);
             $assign->setEquipment($equipment);
@@ -119,7 +119,6 @@ class EquipmentController extends AbstractController
             $due_date = $date_assign->modify('+1 year');
             $assign->setDateAssign($date_assign);
             $assign->setDueDate($due_date);
-
             $this->em->persist($assign);
             //
             $equipment->setStatus(Constants::STATUS_IN_USE);

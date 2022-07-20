@@ -20,7 +20,9 @@
 				<th>Status</th>
 				<th>User</th>
 				<th>Category</th>
-				<th>actions</th>
+				<th>Date assign</th>
+				<th>Due date</th>
+				<th>Actions</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,6 +44,19 @@
 						{% endif  %}
 					</td>
 					<td>{{ equipment.category.name }}</td>
+
+					{% if equipment.getStatus() == STATUS_IN_USE %}
+						<td>
+							{{ equipment.getLastAssign() ? equipment.getLastAssign().getDateAssign()|date('d-m-Y'): "" }}
+						</td>
+						<td>
+							{{ equipment.getLastAssign() ? equipment.getLastAssign().getDueDate()|date('d-m-Y'): "" }}
+						</td>
+					{% else %}
+						<td>...</td>
+						<td>...</td>
+					{% endif  %}
+
 					<td class="d-flex align-items-center ">
 						<a href="{{ path('app_equipment_show', {'id': equipment.id}) }}" class="btn btn-rounded btn-dark">
 							<i class="fa-solid fa-eye"></i>
@@ -68,7 +83,7 @@
 																						ASSIGN</a> #}
 
 							<!-- Button trigger Assign modal -->
-							<button type="button" class="btn btn-dark btn-rounded button-assign" data-mdb-toggle="modal" data-mdb-target="#assignModal"> <i class="fa-solid fa-user-check"></i>
+							<button type="button" class="btn btn-dark btn-rounded button-assign" data-id={{equipment.id}} data-mdb-toggle="modal" data-mdb-target="#assignModal"> <i class="fa-solid fa-user-check"></i>
 								ASSIGN
 							</button>
 
@@ -81,9 +96,9 @@
 											<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
 										</div>
 										<div class="modal-body">
-											<form action="{{ path('app_equipment_assign', {'id': equipment.id}) }}" method="post" id="formAssign">
+											<form action="" method="post" id="formAssign">
 											
-												<input type="hidden" name="_token" value="{{ csrf_token('assign' ~ equipment.id) }}">
+												<input id="assignToken" type="hidden" name="_token" value="{{ csrf_token('assign') }}">
 												<div class="form-group">
 												<label for="formAssignUser" class="form-label">User</label>
 												<input autocomplete="off" type="search" class="form-control rounded searchassign" placeholder='Search ID or User Name' style="min-width: 250px" id="searchUpdate"
@@ -97,8 +112,8 @@
 												</div>
 
 											<div class="modal-footer">
-												<button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-												<button type="submit" class="btn btn-primary" id="modalAssign">Assign</button>
+												<button type="button" class="btn btn-light" data-mdb-dismiss="modal">Close</button>
+												<button type="submit" class="btn btn-dark" id="modalAssign">Assign</button>
 											</div>
 										   </form>
 									</div>
@@ -121,19 +136,22 @@
 
 {% block scripts %}
 	<script>
+
 		window.addEventListener('DOMContentLoaded', (event) => {
 
 			const btnAssign = $('.button-assign')
 			btnAssign.click(function() {
 				let btnModelAssign = $("#modalAssign")
 				let formAssign = $("#formAssign")
+				const id = $(this).data('id');
+				console.log(id)
 				btnModelAssign.on("click", function(e) {
 					e.preventDefault();
 					name = $('#formAssignName').val()
 					label = $('#label-form-assign')
 					if (name === "") label.text("The name field is required.")
 					if (name)
-						formAssign.submit();
+						formAssign.attr('action',`/equipment/${id}/assign` ).submit();
 				})
 			})
 
