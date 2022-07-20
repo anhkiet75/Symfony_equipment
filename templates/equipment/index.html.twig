@@ -10,6 +10,34 @@
 			Create
 		</a>
 	</div>
+	<div>
+		{% if success %}
+			<div class="alert alert-success alert-dismissible fade show" role="alert" data-mdb-color="warning">
+				{{ success }}
+				<button
+					type="button"
+					class="btn-close"
+					data-mdb-dismiss="alert"
+					aria-label="Close"
+				></button>
+			</div>
+			
+		{% endif %}
+
+		{% if error %}
+			{% for message in error %}
+				<div class="alert alert-danger alert-dismissible fade show" role="alert" data-mdb-color="warning">
+				{{ message }}
+				<button
+					type="button"
+					class="btn-close"
+					data-mdb-dismiss="alert"
+					aria-label="Close"
+				></button>
+			</div>
+			{% endfor %}
+		{% endif %}
+	</div>
 	<table class="table">
 		<thead class="table-dark">
 			<tr>

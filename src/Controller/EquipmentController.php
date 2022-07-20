@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Equipment;
 use App\Form\EquipmentType;
-use App\Repository\EquipmentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,10 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classes\Constants;
 use App\Entity\Assign;
+use App\Service\EquipmentService;
+use App\Repository\EquipmentRepository;
 use App\Repository\AssignRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use Symfony\Component\HttpFoundation\RequestStack;
 
 #[Route('/equipment')]
 class EquipmentController extends AbstractController
@@ -24,40 +25,61 @@ class EquipmentController extends AbstractController
     private $equipmentRepository;
     private $userRepository;
     private $assignRepository;
-    function __construct(EntityManagerInterface $em, EquipmentRepository $equipmentRepository, UserRepository $userRepository, AssignRepository $assignRepository)
+
+    private $equipmentService;
+    private $userService;
+    private $categoryService;
+    private $session;
+    function __construct(EntityManagerInterface $em
+    , EquipmentRepository $equipmentRepository
+    , UserRepository $userRepository
+    , AssignRepository $assignRepository
+    , EquipmentService $equipmentService
+    , RequestStack  $session
+    )
+
     {
         $this->em = $em;
         $this->equipmentRepository = $equipmentRepository;
         $this->userRepository = $userRepository;
         $this->assignRepository = $assignRepository;
+
+        $this->equipmentService = $equipmentService;
+        $this->session = $session->getSession();
     }
 
     #[Route('/', name: 'app_equipment_index', methods: ['GET'])]
     public function index(): Response
     {
-        $equipments = $this->equipmentRepository->findAll();
+        // $equipments = $this->equipmentRepository->findAll();
+        $equipments = $this->equipmentService->getAll();
+
         $users = $this->userRepository->findAll();
+        $success = $this->session->get('success', []);
+        $error = $this->session->get('failed', []);
+        
         return $this->render('equipment/index.html.twig', [
             'equipments' => $equipments,
             'users' => $users,
+            'success' => $success,
+            'error' => $error,
             'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
         ]);
     }
 
     #[Route('/new', name: 'app_equipment_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
-    {
+    {      
         $equipments = new Equipment();
         $equipments->setStatus(Constants::STATUS_AVAILABLE);
         $form = $this->createForm(EquipmentType::class, $equipments);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($equipments);
-            $this->em->flush();
+        $check = $this->equipmentService->create($request,$form);
 
+        if ($check) 
+        {
             return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        
         return $this->renderForm('equipment/new.html.twig', [
             'equipments' => $equipments,
             'form' => $form,
@@ -76,15 +98,14 @@ class EquipmentController extends AbstractController
     public function edit($id,Request $request): Response
     {
         $equipment = $this->equipmentRepository->find($id);
-
         $form = $this->createForm(EquipmentType::class, $equipment);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
 
+        $check = $this->equipmentService->edit($request,$form);
+        if ($check) 
+        {
             return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        
         return $this->renderForm('equipment/edit.html.twig', [
             'equipments' => $equipment,
             'form' => $form,
@@ -94,11 +115,10 @@ class EquipmentController extends AbstractController
     #[Route('/{id}', name: 'app_equipment_delete', methods: ['POST'])]
     public function delete($id, Request $request): Response
     {
-        $equipment = $this->equipmentRepository->find($id);
-        if ($this->isCsrfTokenValid('delete'.$equipment->getId(), $request->request->get('_token'))) {
-            $this->em->remove($equipment);
-            $this->em->flush(); 
+        if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
+            $this->equipmentService->delete($id);
         }
+        else $this->session->set('failed','Unable to delete');
 
         return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
     }
