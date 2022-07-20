@@ -11,7 +11,31 @@
 		</a>
 	</div>
 	<div>
-		{% if success %}
+		{% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert" data-mdb-color="warning">
+                {{ message }}
+			<button
+					type="button"
+					class="btn-close"
+					data-mdb-dismiss="alert"
+					aria-label="Close"
+			></button>
+            </div>
+        {% endfor %}
+
+		{% for message in app.flashes('failed') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" data-mdb-color="warning">
+                {{ message }}
+			<button
+					type="button"
+					class="btn-close"
+					data-mdb-dismiss="alert"
+					aria-label="Close"
+			></button>
+            </div>
+        {% endfor %}
+
+		{# {% if success %}
 			<div class="alert alert-success alert-dismissible fade show" role="alert" data-mdb-color="warning">
 				{{ success }}
 				<button
@@ -36,7 +60,7 @@
 				></button>
 			</div>
 			{% endfor %}
-		{% endif %}
+		{% endif %} #}
 	</div>
 	<table class="table">
 		<thead class="table-dark">

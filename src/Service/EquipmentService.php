@@ -10,10 +10,10 @@ use App\Repository\AssignRepository;
 
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
@@ -56,11 +56,11 @@ class EquipmentService extends AbstractController
             
             if (count($errors) > 0) {
                 $errorsString = (string) $errors;
-                $this->session->set('failed',$errorsString);
+                $this->addFlash('failed',$errorsString);
             }
             else {
                 $this->equipmentRepository->add($equipment,true);
-                $this->session->set('success','Equipment created');
+                $this->addFlash('success','Equipment created');
             }
             return true;
         }
@@ -76,11 +76,11 @@ class EquipmentService extends AbstractController
             
             if (count($errors) > 0) {
                 $errorsString = (string) $errors;
-                $this->session->set('failed',$errorsString);
+                $this->addFlash('failed',$errorsString);
             }
             else {
                 $this->equipmentRepository->update($equipment,true);
-                $this->session->set('success','Equipment updated');
+                $this->addFlash('success','Equipment created');
             }
                 
             return true;
@@ -91,9 +91,9 @@ class EquipmentService extends AbstractController
     public function delete($id,Request $request) {
         if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
             $this->equipmentRepository->delete($id,true);
-            $this->session->set('success','Equipment deleted');
+            $this->addFlash('success','Equipment deleted');
         }
-        else $this->session->set('failed','Unable to delete');
+        else $this->addFlash('failed','Unable to delete');
     }
 
     public function assign($id, Request $request) {
@@ -104,17 +104,17 @@ class EquipmentService extends AbstractController
 
             $this->assignRepository->store($user,$equipment);
             $this->equipmentRepository->setStatus($equipment,Constants::STATUS_IN_USE);
-            $this->session->set('success','Equipment assigned');
+            $this->addFlash('success','Equipment assigned');
         }
-        else $this->session->set('failed','Unable to assign');
+        else $this->addFlash('failed','Unable to assign');
     }
 
     public function unassign($id, Request $request) {
         if ($this->isCsrfTokenValid('unassign', $request->request->get('_token'))) {
             $equipment = $this->equipmentRepository->findOne($id);
             $this->equipmentRepository->setStatus($equipment,Constants::STATUS_AVAILABLE);
-            $this->session->set('success','Equipment unassigned');
+            $this->addFlash('success','Equipment unassigned');        
         }
-        else $this->session->set('failed','Unable to unassign');
+        else $this->addFlash('failed','Unable to unassign');
     }
 }

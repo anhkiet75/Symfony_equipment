@@ -119,7 +119,7 @@ class EquipmentController extends AbstractController
     #[Route('/{id}', name: 'app_equipment_delete', methods: ['POST'])]
     public function delete($id, Request $request): Response
     {
-        $this->equipmentService->delete($id);
+        $this->equipmentService->delete($id,$request);
         return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
     }
 
