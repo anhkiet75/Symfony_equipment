@@ -23,6 +23,10 @@ class EquipmentRepository extends ServiceEntityRepository
         return $this->findAll();
     }
 
+    public function findOne($id) {
+        return $this->find($id);
+    }
+
     public function add(Equipment $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -57,6 +61,11 @@ class EquipmentRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function setStatus(Equipment $entity,$status) {
+        $entity->setStatus($status);
+        $this->getEntityManager()->flush();
     }
 
     // /**

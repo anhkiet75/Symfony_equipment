@@ -96,7 +96,7 @@
 							{# <a href="{{ path('app_equipment_unassign', {'id': equipment.id}) }} " class="btn btn-danger"> #}
 
 							<form method="post" action="{{ path('app_equipment_unassign', {'id': equipment.id}) }}" onsubmit="return confirm('Are you sure you want to Unassign this item?');" style="height: 36px">
-								<input type="hidden" name="_token" value="{{ csrf_token('unassign' ~ equipment.id) }}">
+								<input type="hidden" name="_token" value="{{ csrf_token('unassign') }}">
 								<button class="btn btn-light btn-rounded px-3">
 									<i class="fa-solid fa-user-slash"></i>
 									UNASSIGN

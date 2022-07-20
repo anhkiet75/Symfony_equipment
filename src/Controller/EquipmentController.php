@@ -69,11 +69,11 @@ class EquipmentController extends AbstractController
 
     #[Route('/new', name: 'app_equipment_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
-    {      
+    {   
         $equipments = new Equipment();
-        $equipments->setStatus(Constants::STATUS_AVAILABLE);
         $form = $this->createForm(EquipmentType::class, $equipments);
-        $check = $this->equipmentService->create($request,$form);
+
+        $check = $this->equipmentService->create($request, $form);
 
         if ($check) 
         {
@@ -99,7 +99,6 @@ class EquipmentController extends AbstractController
     {
         $equipment = $this->equipmentRepository->find($id);
         $form = $this->createForm(EquipmentType::class, $equipment);
-
         $check = $this->equipmentService->edit($request,$form);
         if ($check) 
         {
@@ -115,47 +114,21 @@ class EquipmentController extends AbstractController
     #[Route('/{id}', name: 'app_equipment_delete', methods: ['POST'])]
     public function delete($id, Request $request): Response
     {
-        if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
-            $this->equipmentService->delete($id);
-        }
-        else $this->session->set('failed','Unable to delete');
-
+        $this->equipmentService->delete($id);
         return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/assign', name: 'app_equipment_assign', methods: ['POST'])]
     public function assign($id, Request $request): Response
     {
-        $equipment = $this->equipmentRepository->find($id);
-        $user_id = $request->request->get('user_id');
-        $user = $this->userRepository->find($user_id);
-        if ($this->isCsrfTokenValid('assign', $request->request->get('_token'))) {
-            $assign = new Assign();
-            $assign->setUser($user);
-            $assign->setEquipment($equipment);
-
-            $date_assign = new \DateTimeImmutable();
-            $date_assign->format('Y-m-d H:i:s');
-            $due_date = $date_assign->modify('+1 year');
-            $assign->setDateAssign($date_assign);
-            $assign->setDueDate($due_date);
-            $this->em->persist($assign);
-            //
-            $equipment->setStatus(Constants::STATUS_IN_USE);
-            $this->em->flush();
-        }
+        $this->equipmentService->assign($id,$request);
         return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/unassign', name: 'app_equipment_unassign', methods: ['POST'])]
     public function unassign($id, Request $request): Response
     {
-        $equipment = $this->equipmentRepository->find($id);
-        if ($this->isCsrfTokenValid('unassign'.$equipment->getId(), $request->request->get('_token'))) {
-            // $user = $equipment->getLastUser();
-            $equipment->setStatus(Constants::STATUS_AVAILABLE);
-            $this->em->flush();
-        }
+        $this->equipmentService->unassign($id,$request);
         return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
     }
 

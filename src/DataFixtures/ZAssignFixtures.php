@@ -20,7 +20,6 @@ class ZAssignFixtures extends Fixture
     {
        
         for ($i = 0; $i < 5; $i++) {
-
             $assign = new Assign();
             $date = new DateTimeImmutable('2006-12-12');
             $assign->setDateAssign($date);
