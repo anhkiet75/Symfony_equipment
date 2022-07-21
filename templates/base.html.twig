@@ -11,66 +11,66 @@
 		</title>
 
 		<!-- Font Awesome -->
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
-		
+		<link
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+
 		<!-- Google Fonts -->
-		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+		<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
 		<!-- MDB -->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.3.0/mdb.min.css" rel="stylesheet"/>
 
 		<style>
-			.list-group-item.active{
+			.list-group-item.active {
 				background-color: black !important;
-	 		}
+			}
 		</style>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.3.0/mdb.min.js"></script>
 
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 
-		{% block scripts %}
-		{% endblock %}
+		{% block scripts %}{% endblock %}
 
 
-		{% block validate %}
-		{% endblock %}
+		{% block validate %}{% endblock %}
 		{# <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script> #}
-		<!-- Custom styles -->
+	<!-- Custom styles -->
 		{# <link rel="stylesheet" href="css/admin.css"/> #}
 		{# <link rel="stylesheet" href="css/autocomplete.css"> #}
 		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
-				    crossorigin="anonymous"></script> -->
+						    crossorigin="anonymous"></script> -->
 	</head>
 	<body>
 		<!--Main Navigation-->
 		<!-- Sidebar -->
 			<nav id="sidebarMenu" class="collapse d-lg-block sidebar bg-white" style="width:200px; margin-top: 70px "> <div class="position-fixed">
 				{% if app.user %}
-				{% if 'ROLE_ADMIN' in app.user.roles %}
-				<div class="list-group list-group-flush mx-3 mt-4">
-					<a href="/category" class="rounded list-group-item list-group-item-action py-2 ripple
-															{{ 'app_category' in app.request.attributes.get('_route') ? 'active' }}
-													          ">
-						<i class="fas fa-tachometer-alt fa-fw me-3"></i>
-						<span>Category</span>
-					</a>
-					<a href="/equipment" class="rounded list-group-item list-group-item-action py-2 ripple
-													          {# {{ Route::currentRouteNamed('web.equipment.index') ? 'active' : '' }} #}
-															{{ 'app_equipment' in app.request.attributes.get('_route') ? 'active' }}
-							
-													          ">
-						<i class="fas fa-chart-area fa-fw me-3"></i>
-						<span>Equipment</span>
-					</a>
-					<a href="/user" class="rounded list-group-item list-group-item-action py-2 ripple
-													          {# {{ Route::currentRouteNamed('web.user.index') ? 'active' : '' }} #}
-														{{ 'app_user' in app.request.attributes.get('_route') ? 'active' }}
-													          ">
-						<i class="fas fa-users fa-fw me-3"></i>
-						<span>User</span>
-					</a>
-				</div>
-				{% endif %}
+					{% if 'ROLE_ADMIN' in app.user.roles %}
+						<div class="list-group list-group-flush mx-3 mt-4">
+							<a href="/category" class="rounded list-group-item list-group-item-action py-2 ripple
+																								{{ 'app_category' in app.request.attributes.get('_route') ? 'active' }}
+																						          ">
+								<i class="fas fa-tachometer-alt fa-fw me-3"></i>
+								<span>Category</span>
+							</a>
+							<a href="/equipment" class="rounded list-group-item list-group-item-action py-2 ripple
+																						          {# {{ Route::currentRouteNamed('web.equipment.index') ? 'active' : '' }} #}
+																								{{ 'app_equipment' in app.request.attributes.get('_route') ? 'active' }}
+									
+																						          ">
+								<i class="fas fa-chart-area fa-fw me-3"></i>
+								<span>Equipment</span>
+							</a>
+							<a href="/user" class="rounded list-group-item list-group-item-action py-2 ripple
+																						          {# {{ Route::currentRouteNamed('web.user.index') ? 'active' : '' }} #}
+																							{{ 'app_user' in app.request.attributes.get('_route') ? 'active' }}
+																						          ">
+								<i class="fas fa-users fa-fw me-3"></i>
+								<span>User</span>
+							</a>
+						</div>
+					{% endif %}
 				{% endif %}
 			</div>
 		</nav>
@@ -140,12 +140,25 @@
 
 		<!--Main layout-->
 		<main style="margin-top: 70px; padding-left: 200px">
-			<div class="container-fluid ma-0 pa-0 "> 
-			{% block body %}{% endblock %}
+			<div class="container-fluid ma-0 pa-0 ">
+				{% for message in app.flashes('success') %}
+					<div class="alert alert-success alert-dismissible fade show" role="alert" data-mdb-color="warning">
+						{{ message }}
+						<button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+
+				{% for message in app.flashes('failed') %}
+					<div class="alert alert-danger alert-dismissible fade show" role="alert" data-mdb-color="warning">
+						{{ message }}
+						<button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endfor %}
+				{% block body %}{% endblock %}
 			</div>
 		</main>
-			<!--Main layout-->
-			<!-- MDB -->
+		<!--Main layout-->
+		<!-- MDB -->
 
 	</body>
 </html>

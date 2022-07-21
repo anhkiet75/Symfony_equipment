@@ -3,8 +3,9 @@
 namespace App\Service;
 
 use App\Classes\Constants;
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Entity\Category;
+use App\Repository\CategoryRepository;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -13,41 +14,39 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-class UserService extends AbstractController
+class CategoryService extends AbstractController
 {
-    private $userRepository;
-    private $session;
+    private $categoryRepository;
     private $validator; 
     
-    public function __construct(UserRepository $userRepository, RequestStack  $session,ValidatorInterface $validator) {
-        $this->userRepository = $userRepository;
-        $this->session = $session->getSession();
+    public function __construct(CategoryRepository $categoryRepository,ValidatorInterface $validator) {
+        $this->categoryRepository = $categoryRepository;
         $this->validator = $validator;
     }
 
     public function getAll() {
-        return $this->userRepository->getAll();
+        return $this->categoryRepository->getAll();
     }
 
-    public function getListEquipment(User $entity) {
-        return $this->userRepository->getListEquipment($entity);
+    public function getList(Category $entity) {
+        return $this->categoryRepository->getList($entity);
     }
 
     public function create(Request $request, $form) {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
+            $category = $form->getData();
 
-            $errors = $this->validator->validate($user);
+            $errors = $this->validator->validate($category);
             
             if (count($errors) > 0) {
                 $errorsString = (string) $errors;
                 $this->addFlash('failed',$errorsString);
             }
             else {
-                $this->userRepository->add($user,true);
-                $this->addFlash('success','User created');
+                $this->categoryRepository->add($category,true);
+                $this->addFlash('success','Category created');
             }
             return true; 
         }
@@ -58,26 +57,26 @@ class UserService extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $errors = $this->validator->validate($user);
+            $category = $form->getData();
+            $errors = $this->validator->validate($category);
             
             if (count($errors) > 0) {
                 $errorsString = (string) $errors;
                 $this->addFlash('failed',$errorsString);
             }
             else {
-                $this->userRepository->update($user,true);
-                $this->addFlash('success','User updated');
+                $this->categoryRepository->update($category,true);
+                $this->addFlash('success','Category updated');
             }
             return true;
         }
         return false;
     }
 
-    public function delete(Request $request, User $user) {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $this->userRepository->remove($user, true);
-            $this->addFlash('success','User deleted');
+    public function delete(Request $request, Category $category) {
+        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
+            $this->categoryRepository->remove($category, true);
+            $this->addFlash('success','Category deleted');
         }
         else $this->addFlash('failed','Unable to delete');
     }
