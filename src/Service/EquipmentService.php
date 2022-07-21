@@ -39,7 +39,7 @@ class EquipmentService extends AbstractController
     }
 
     public function findOne($id) {
-        return $this->equipmentRepository->findOne();
+        return $this->equipmentRepository->findOne($id);
     }
 
     public function getHistory(Equipment $entity) {
@@ -66,7 +66,6 @@ class EquipmentService extends AbstractController
         }
         return false;
     }
-
 
     public function edit(Request $request,$form) { 
         $form->handleRequest($request);

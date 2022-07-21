@@ -25,27 +25,18 @@ class EquipmentController extends AbstractController
     private $em;
     private $equipmentRepository;
     private $userRepository;
-    private $assignRepository;
 
     private $equipmentService;
     private $userService;
     private $categoryService;
     private $session;
-    function __construct(EntityManagerInterface $em
-    , EquipmentRepository $equipmentRepository
-    , UserRepository $userRepository
-    , AssignRepository $assignRepository
-    , EquipmentService $equipmentService
+    function __construct(
+    EquipmentService $equipmentService
     , UserService $userService
     , RequestStack  $session
     )
 
     {
-        $this->em = $em;
-        $this->equipmentRepository = $equipmentRepository;
-        $this->userRepository = $userRepository;
-        $this->assignRepository = $assignRepository;
-
         $this->equipmentService = $equipmentService;
         $this->userService = $userService;
         $this->session = $session->getSession();
@@ -74,8 +65,7 @@ class EquipmentController extends AbstractController
 
         $check = $this->equipmentService->create($request, $form);
 
-        if ($check) 
-        {
+        if ($check) {
             return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
         }
         
