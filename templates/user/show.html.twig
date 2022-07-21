@@ -34,9 +34,48 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+   <h3>Equipment</h3>
+    {% if equipments %}
+	<table class="table">
+		 <thead>
+			<tr>
+				<th>Id</th>
+				<th>Serial_number</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Status</th>
+				<th>Category</th>
+				<th>Date assign</th>
+				<th>Due date</th>
+			</tr>
+		</thead>
+          
+	    <tbody>
+                {% for equipment in equipments %}
+                <tr>
+                    <td>{{ equipment.id }}</td>
+					<td>{{ equipment.serialNumber }}</td>
+					<td>{{ equipment.name }}</td>
+					<td>{{ equipment.description }}</td>
+					<td>{{ equipment.status }}</td>
+					<td>{{ equipment.category.name }}</td>
+	                <td>
+						{{ equipment.getLastAssign() ? equipment.getLastAssign().getDateAssign()|date('d-m-Y'): "" }}
+					</td>
+					<td>
+						{{ equipment.getLastAssign() ? equipment.getLastAssign().getDueDate()|date('d-m-Y'): "" }}
+					</td>
+                </tr>
+                {% endfor %}
+		</tbody>
+	</table>
+    {% else %}
+        <h4>Not found equipment</h4>
+    {% endif %}
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+    <a href="{{ path('app_user_index') }}" class="btn btn-dark mt-2 px-0" style="width: 130px">back to list</a>
+<br>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-dark mt-2 " style="width: 130px">edit</a>
 
     {{ include('user/_delete_form.html.twig') }}
 {% endblock %}

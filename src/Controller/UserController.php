@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,9 +14,17 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/user')]
 class UserController extends AbstractController
 {
+
+    private UserService $userService;
+
+    function __construct(UserService $userService) {
+        $this->userService = $userService;
+    }
+
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
+     
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);
@@ -43,7 +52,13 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
+        if ($user !== $this->getUser()) {
+            return $this->redirectToRoute('app_user_show', ['id' => $this->getUser()->getId()]);
+        }
+        $equipments = $this->userService->getListEquipment($user);
+        // dd($equipments);
         return $this->render('user/show.html.twig', [
+            'equipments' => $equipments,
             'user' => $user,
         ]);
     }
@@ -75,4 +90,5 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

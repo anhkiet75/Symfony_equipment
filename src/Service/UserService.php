@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Classes\Constants;
 use App\Entity\Equipment;
+use App\Entity\User;
 use App\Repository\EquipmentRepository;
 use App\Repository\UserRepository;
 use App\Repository\AssignRepository;
@@ -30,6 +31,10 @@ class UserService extends AbstractController
 
     public function getAll() {
         return $this->userRepository->getAll();
+    }
+
+    public function getListEquipment(User $entity) {
+        return $this->userRepository->getListEquipment($entity);
     }
 
 }

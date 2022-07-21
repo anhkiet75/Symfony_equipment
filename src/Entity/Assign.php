@@ -40,7 +40,7 @@ class Assign
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Equipment::class, inversedBy="assigns")
+     * @ORM\ManyToOne(targetEntity=Equipment::class, inversedBy="assigns",fetch= "EAGER")
      */
     private $equipment;
 

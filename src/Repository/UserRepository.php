@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use App\Classes\Constants;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -71,6 +72,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function getAll() {
         return $this->findAll();
+    }
+
+    public function getListEquipment(User $entity) {
+        $result = array();
+        $assigns = $entity->getAssigns();
+        foreach ($assigns as $assign) {
+            $equipment = $assign->getEquipment();
+            if ($equipment && $equipment->getStatus() ==  Constants::STATUS_IN_USE)
+                if ( $equipment->getLastUser()->getId() == $entity->getId()) {
+                    $result[] = $equipment;
+                }
+        }
+        return $result;
     }
 
 //    /**

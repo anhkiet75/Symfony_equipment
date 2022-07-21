@@ -58,14 +58,10 @@ class EquipmentController extends AbstractController
         $equipments = $this->equipmentService->getAll();
 
         $users = $this->userService->getAll();
-        $success = $this->session->get('success', []);
-        $error = $this->session->get('failed', []);
-        
+    
         return $this->render('equipment/index.html.twig', [
             'equipments' => $equipments,
             'users' => $users,
-            'success' => $success,
-            'error' => $error,
             'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
         ]);
     }
