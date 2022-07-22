@@ -46,7 +46,6 @@ class RegistrationFormType extends AbstractType
                 'widget' => 'single_text',
                 'html5' => false,
                 'format' => 'yyyy-MM-dd',
-                // 'input'  => 'datetime_immutable',
                 'attr' => ['class' => 'datepicker form-control mt-1'],
             ])
             ->add('email', TextType::class, [

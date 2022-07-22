@@ -129,10 +129,14 @@
 											
 												<input id="assignToken" type="hidden" name="_token" value="{{ csrf_token('assign') }}">
 												<div class="form-group">
+													<label for="date" class="col-1 col-form-label">Date</label>
+													<input type="date" class="form-control" id="date" name="duedate"/>
+												</div>	
 												<label for="formAssignUser" class="form-label">User</label>
 												<input autocomplete="off" type="search" class="form-control rounded searchassign" placeholder='Search ID or User Name' style="min-width: 250px" id="searchUpdate"
 												{# data-token="{{ csrf_token() }}" #}
 												></input>
+													
 													<select class="form-select formAssignUser" id="formAssignUser" aria-label="Default select example" name="user_id">
 														{% for user in users %}
 														<option value="{{user.id}}">{{user.id}} {{user.name}}</option>
@@ -211,5 +215,14 @@
       })
 		});
 	</script>
+
+		<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+		{# <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"> #}
+		<script>
+		
+		$(function(){
+			$('#datepicker').datepicker();
+		});
+		</script>
 
 {% endblock %}
