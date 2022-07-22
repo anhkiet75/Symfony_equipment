@@ -19,6 +19,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+
 #[Route('/equipment')]
 class EquipmentController extends AbstractController
 {
@@ -88,7 +89,7 @@ class EquipmentController extends AbstractController
     #[Route('/{id}/edit', name: 'app_equipment_edit', methods: ['GET', 'POST'])]
     public function edit($id,Request $request): Response
     {
-        $equipment = $this->equipmentRepository->find($id);
+        $equipment = $this->equipmentService->findOne($id);
         $form = $this->createForm(EquipmentType::class, $equipment);
         $check = $this->equipmentService->edit($request,$form);
         if ($check) 

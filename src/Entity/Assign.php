@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\AssignRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=AssignRepository::class)
  */
@@ -26,6 +26,8 @@ class Assign
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * /**
+     * @Assert\GreaterThan("today")
      */
     private $due_date;
 

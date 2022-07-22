@@ -14,6 +14,7 @@ use Faker\Generator;
 use Faker\Factory;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Validator\Constraints as Assert;
+use JsonSerializable;
 /**
  * @ORM\Entity(repositoryClass=EquipmentRepository::class)
  * @ORM\HasLifecycleCallbacks()
@@ -201,4 +202,5 @@ class Equipment
         $this->serial_number = $this->faker->ean8;
     }
 
+   
 }
