@@ -1,0 +1,104 @@
+	{% for equipment in equipments %}
+				<tr>
+					<td>{{ equipment.id }}</td>
+					<td>{{ equipment.serialNumber }}</td>
+					<td>{{ equipment.name }}</td>
+					<td>{{ equipment.description }}</td>
+					<td>{{ equipment.status }}</td>
+					<td>
+						{% if equipment.getStatus() == STATUS_IN_USE %}
+							{{ equipment.getLastUser() ? equipment.getLastUser().getName(): "" }}
+						{% else %}
+							<span class="text-danger">
+								Not assign
+							</span>
+						{% endif  %}
+					</td>
+					<td>{{ equipment.category.name }}</td>
+
+					{% if equipment.getStatus() == STATUS_IN_USE %}
+						<td>
+							{{ equipment.getLastAssign() ? equipment.getLastAssign().getDateAssign()|date('d-m-Y'): "" }}
+						</td>
+						<td>
+							{{ equipment.getLastAssign() ? equipment.getLastAssign().getDueDate()|date('d-m-Y'): "" }}
+						</td>
+					{% else %}
+						<td>...</td>
+						<td>...</td>
+					{% endif  %}
+
+					<td class="d-flex align-items-center ">
+						<a href="{{ path('app_equipment_show', {'id': equipment.id}) }}" class="btn btn-rounded btn-dark">
+							<i class="fa-solid fa-eye"></i>
+							SHOW</a>
+						<a href="{{ path('app_equipment_edit', {'id': equipment.id}) }} " class="btn btn-rounded btn-dark">
+							<i class="far fa-edit fa-fw editor"></i>
+							EDIT</a>
+						{% if equipment.getStatus() == STATUS_IN_USE %}
+							<form method="post" action="{{ path('app_equipment_unassign', {'id': equipment.id}) }}" onsubmit="return confirm('Are you sure you want to Unassign this item?');" style="height: 36px">
+								<input type="hidden" name="_token" value="{{ csrf_token('unassign') }}">
+								<button class="btn btn-light btn-rounded px-3">
+									<i class="fa-solid fa-user-slash"></i>
+									UNASSIGN
+								</button>
+							</form>
+
+							{# </a> #}
+
+						{% else %}
+							<button type="button" class="btn btn-dark btn-rounded button-assign" data-id={{equipment.id}} data-mdb-toggle="modal" data-mdb-target="#assignModal"> <i class="fa-solid fa-user-check"></i>
+								ASSIGN
+							</button>
+
+							<!-- Assign Modal -->
+							<div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="assignModalLabel">Assign User</h5>
+											<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<form action="" method="post" id="formAssign">
+												<input id="assignToken" type="hidden" name="_token" value="{{ csrf_token('assign') }}">
+
+												<div class="autocomplete" style="width:300px;">
+													<label for="myInput" class="form-label">User</label>
+													<input id="myInput" type="text" placeholder="" autocomplete="off">
+													<input id="username" type="hidden" name="user_id">
+													<label id="label-form-assign" for="myInput" class="form-label" style="color:red"></label>
+												</div>
+
+												<div class="form-group">
+													<label for="formDueDate" class="form-label">Due Date</label>
+													<br>
+													<input id="dueDate" type="date" name="due_date">
+													<br>
+													<label id ="date-label" for="formDueDate" class="form-label" style="color:red"></label>
+												</div>
+												{# <div class="form-group">
+													<label for="formAssignUser" class="form-label">User</label>
+													<input autocomplete="off" type="search" class="form-control rounded searchassign" placeholder='Search ID or User Name' style="min-width: 250px" id="searchUpdate"
+													></input>
+													<select class="form-select formAssignUser" id="formAssignUser" aria-label="Default select example" name="user_id">
+														{% for user in users %}
+														<option value="{{user.id}}">{{user.id}} {{user.name}}</option>
+														{% endfor %}
+													</select>
+												</div> #}
+
+												<div class="modal-footer">
+													<button type="button" class="btn btn-light" data-mdb-dismiss="modal">Close</button>
+													<button type="submit" class="btn btn-dark" id="modalAssign">Assign</button>
+												</div>
+										   </form>
+								    	</div>
+							    	</div>
+						    	</div>
+						    </div>
+				        {% endif %}
+			        </td>
+			</tr>
+
+    {% endfor %}

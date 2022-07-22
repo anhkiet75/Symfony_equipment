@@ -81,4 +81,8 @@ class CategoryService extends AbstractController
         else $this->addFlash('failed','Unable to delete');
     }
 
+    public function search($id) {
+        return $this->categoryRepository->search($id);
+    }
+
 }

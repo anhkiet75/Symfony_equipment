@@ -10,35 +10,37 @@
 			Create
 		</a>
 	</div>
-	<div>
 
-		{# {% if success %}
-			<div class="alert alert-success alert-dismissible fade show" role="alert" data-mdb-color="warning">
-				{{ success }}
-				<button
-					type="button"
-					class="btn-close"
-					data-mdb-dismiss="alert"
-					aria-label="Close"
-				></button>
-			</div>
-			
-		{% endif %}
+	<div class="d-flex">	
+		<div style="width: 400px">
+			<form class="d-none d-md-flex input-group w-auto my-auto" action="#">
+				<input autocomplete="off" type="search" class="form-control rounded" placeholder='Search ID or Serial Number' style="min-width: 250px" name="id" id="searchtable" />
+				<button type="submit" class="btn btn-primary">
+					<i class="fas fa-search"></i>
+				</button>
+			</form>
+		</div>
 
-		{% if error %}
-			{% for message in error %}
-				<div class="alert alert-danger alert-dismissible fade show" role="alert" data-mdb-color="warning">
-				{{ message }}
-				<button
-					type="button"
-					class="btn-close"
-					data-mdb-dismiss="alert"
-					aria-label="Close"
-				></button>
-			</div>
-			{% endfor %}
-		{% endif %} #}
+		<div class="dropdown ml-2">
+			<button
+				class="btn btn-primary dropdown-toggle"
+				type="button"
+				id="dropdownMenuButton"
+				data-mdb-toggle="dropdown"
+				aria-expanded="false"
+			>
+				Filter
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				{% for category in categories %}
+					<li>
+						<a class="dropdown-item categoryFilter" href="#" data-id={{category.id}}>{{category.name}}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
 	</div>
+	
 	<table class="table">
 		<thead class="table-dark">
 			<tr>
@@ -126,93 +128,277 @@
 										</div>
 										<div class="modal-body">
 											<form action="" method="post" id="formAssign">
-											
 												<input id="assignToken" type="hidden" name="_token" value="{{ csrf_token('assign') }}">
+
+												<div class="autocomplete" style="width:300px;">
+													<label for="myInput" class="form-label">User</label>
+													<input id="myInput" type="text" placeholder="" autocomplete="off">
+													<input id="username" type="hidden" name="user_id">
+													<label id="label-form-assign" for="myInput" class="form-label" style="color:red"></label>
+												</div>
+
 												<div class="form-group">
-													<label for="date" class="col-1 col-form-label">Date</label>
-													<input type="date" class="form-control" id="date" name="duedate"/>
-												</div>	
-												<label for="formAssignUser" class="form-label">User</label>
-												<input autocomplete="off" type="search" class="form-control rounded searchassign" placeholder='Search ID or User Name' style="min-width: 250px" id="searchUpdate"
-												{# data-token="{{ csrf_token() }}" #}
-												></input>
-													
+													<label for="formDueDate" class="form-label">Due Date</label>
+													<br>
+													<input id="dueDate" type="date" name="due_date">
+													<br>
+													<label id ="date-label" for="formDueDate" class="form-label" style="color:red"></label>
+												</div>
+												{# <div class="form-group">
+													<label for="formAssignUser" class="form-label">User</label>
+													<input autocomplete="off" type="search" class="form-control rounded searchassign" placeholder='Search ID or User Name' style="min-width: 250px" id="searchUpdate"
+													></input>
 													<select class="form-select formAssignUser" id="formAssignUser" aria-label="Default select example" name="user_id">
 														{% for user in users %}
 														<option value="{{user.id}}">{{user.id}} {{user.name}}</option>
 														{% endfor %}
 													</select>
-												</div>
+												</div> #}
 
-											<div class="modal-footer">
-												<button type="button" class="btn btn-light" data-mdb-dismiss="modal">Close</button>
-												<button type="submit" class="btn btn-dark" id="modalAssign">Assign</button>
-											</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-light" data-mdb-dismiss="modal">Close</button>
+													<button type="submit" class="btn btn-dark" id="modalAssign">Assign</button>
+												</div>
 										   </form>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					{% endif %}
+						{% endif %}
+					</td>
 				</tr>
-			</td>
+			{% endfor %}
 		</tbody>
-	</tr>
-{% else %}
-	<tr>
-		<td colspan="6">no records found</td>
-	</tr>
-{% endfor %}
-</tbody>
-</table>
+	</table>
+
+<style>
+* { box-sizing: border-box; }
+body {
+  font: 16px Arial;
+}
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+}
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+</style>
 {% endblock %}
 
 {% block scripts %}
 	<script>
-
+				
 		window.addEventListener('DOMContentLoaded', (event) => {
+			
+			var temp = {{ users | json_encode() | raw }}
+			var users = []
+			var arr_index = []
+			temp.forEach(function(value,index) {
+				users[index] = value.name
+				arr_index[index] = value.id
+			})
+			function autocomplete(inp, arr) {
+				/*the autocomplete function takes two arguments,
+				the text field element and an array of possible autocompleted values:*/
+				var currentFocus;
+				/*execute a function when someone writes in the text field:*/
+				inp.addEventListener("input", function(e) {
+					var a, b, i, val = this.value;
+					/*close any already open lists of autocompleted values*/
+					closeAllLists();
+					if (!val) { return false;}
+					currentFocus = -1;
+					/*create a DIV element that will contain the items (values):*/
+					a = document.createElement("DIV");
+					a.setAttribute("id", this.id + "autocomplete-list");
+					a.setAttribute("class", "autocomplete-items");
+					/*append the DIV element as a child of the autocomplete container:*/
+					this.parentNode.appendChild(a);
+					/*for each item in the array...*/
+					for (i = 0; i < arr.length; i++) {
+						/*check if the item starts with the same letters as the text field value:*/
+						if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+						/*create a DIV element for each matching element:*/
+						b = document.createElement("DIV");
+						/*make the matching letters bold:*/
+						b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+						b.innerHTML += arr[i].substr(val.length);
+						/*insert a input field that will hold the current array item's value:*/
+						b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+						b.dataset.id =  i
+						/*execute a function when someone clicks on the item value (DIV element):*/
+							b.addEventListener("click", function(e) {
+							/*insert the value for the autocomplete text field:*/
+							inp.value = this.getElementsByTagName("input")[0].value;
+							inp.dataset.id = arr_index[this.dataset.id]
+						
+							/*close the list of autocompleted values,
+							(or any other open lists of autocompleted values:*/
+							closeAllLists();
+						});
+						a.appendChild(b);
+						}
+					}
+				});
+				/*execute a function presses a key on the keyboard:*/
+				inp.addEventListener("keydown", function(e) {
+					var x = document.getElementById(this.id + "autocomplete-list");
+					if (x) x = x.getElementsByTagName("div");
+					if (e.keyCode == 40) {
+						/*If the arrow DOWN key is pressed,
+						increase the currentFocus variable:*/
+						currentFocus++;
+						/*and and make the current item more visible:*/
+						addActive(x);
+					} else if (e.keyCode == 38) { //up
+						/*If the arrow UP key is pressed,
+						decrease the currentFocus variable:*/
+						currentFocus--;
+						/*and and make the current item more visible:*/
+						addActive(x);
+					} else if (e.keyCode == 13) {
+						/*If the ENTER key is pressed, prevent the form from being submitted,*/
+						e.preventDefault();
+						if (currentFocus > -1) {
+						/*and simulate a click on the "active" item:*/
+						if (x) x[currentFocus].click();
+						}
+					}
+				});
+				function addActive(x) {
+					/*a function to classify an item as "active":*/
+					if (!x) return false;
+					/*start by removing the "active" class on all items:*/
+					removeActive(x);
+					if (currentFocus >= x.length) currentFocus = 0;
+					if (currentFocus < 0) currentFocus = (x.length - 1);
+					/*add class "autocomplete-active":*/
+					x[currentFocus].classList.add("autocomplete-active");
+				}
+				function removeActive(x) {
+					/*a function to remove the "active" class from all autocomplete items:*/
+					for (var i = 0; i < x.length; i++) {
+					x[i].classList.remove("autocomplete-active");
+					}
+				}
+				function closeAllLists(elmnt) {
+					/*close all autocomplete lists in the document,
+					except the one passed as an argument:*/
+					var x = document.getElementsByClassName("autocomplete-items");
+					for (var i = 0; i < x.length; i++) {
+					if (elmnt != x[i] && elmnt != inp) {
+					x[i].parentNode.removeChild(x[i]);
+					}
+				}
+				}
+
+				/*execute a function when someone clicks in the document:*/
+				document.addEventListener("click", function (e) {
+					closeAllLists(e.target);
+				});
+			}
+	
+			autocomplete(document.getElementById("myInput"), users);
 
 			const btnAssign = $('.button-assign')
 			btnAssign.click(function() {
 				let btnModelAssign = $("#modalAssign")
-				let formAssign = $("#formAssign")
+				let userForm = $("#myInput")
+				let hiddenForm = $("#username")
 				const id = $(this).data('id');
-				console.log(id)
+
 				btnModelAssign.on("click", function(e) {
 					e.preventDefault();
-					name = $('#formAssignName').val()
+					let formAssign = $("#formAssign")
+					let dateLabel = $("#date-label")
+					name = userForm.val()
 					label = $('#label-form-assign')
-					if (name === "") label.text("The name field is required.")
-					if (name)
+					var TodayDate = new Date();
+					var dueDate= new Date(Date.parse($("#dueDate").val()));
+
+					if (dueDate <= TodayDate) {
+						dateLabel.text("Duedate must be after today");
+					}
+					if (!userForm.data("id")) label.text("The name field is not accepted.")
+					
+					if (userForm.data("id") && dueDate > TodayDate) {
+						hiddenForm.val(userForm.data("id"))
 						formAssign.attr('action',`/equipment/${id}/assign` ).submit();
+					}
 				})
 			})
 
-
-			$('.searchassign').on('keyup', function() {
+			$('#searchtable').on('keyup', function() {
 			 	$value = $(this).val();
 				var token = $(this).data('token');
 				console.log($value);
 				$.ajax({
 					type: 'get',
-					url: '{{ (path("app_equipment_search_user")) }}',
+					url: '{{ (path("app_equipment_search")) }}',
 					data: {
 						'value': $value
 					},
 					success: function(data) {
+						$('tbody').html(data);
 						console.log(data)
-						 $('.formAssignUser')
-							.find('option')
-							.remove()
-							.end()
-						data.forEach((element) => {
-							$('.formAssignUser')
-							.append($('<option>')
-								.val(element.id).text(element.name));
-						})
 					}
 				});	
-      })
+  	  		})
+
+			$('.categoryFilter').click(function () {
+				$id = $(this).data('id');
+				console.log($id);
+				$.ajax({
+					type: 'get',
+					url: '{{ (path("app_equipment_filter")) }}',
+					data: {
+						'id': $id
+					},
+					success: function(data) {
+						$('tbody').html(data);
+						console.log(data)
+					}
+				});	
+			})
 		});
 	</script>
 

@@ -27,6 +27,11 @@ class EquipmentRepository extends ServiceEntityRepository
         return $this->find($id);
     }
 
+    public function findByID($id) {
+        return $this->findBy(['category' => $id]);
+        // return $this->find($id) ;
+    }
+
     public function getHistory(Equipment $entity) {
         return $entity->getAssigns();
     }
@@ -70,6 +75,17 @@ class EquipmentRepository extends ServiceEntityRepository
     public function setStatus(Equipment $entity,$status) {
         $entity->setStatus($status);
         $this->getEntityManager()->flush();
+    }
+
+    public function search($value) {
+        return $this->createQueryBuilder('e')
+        ->where('e.name LIKE :name')
+        ->setParameter('name', '%'.$value.'%')
+        ->orWhere('e.id LIKE :id')
+        ->setParameter('id', '%'.$value.'%')
+        ->getQuery()
+        ->getResult();
+        // return $this->findAll();
     }
 
     // /**

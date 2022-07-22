@@ -19,16 +19,8 @@ class AssignRepository extends ServiceEntityRepository
         parent::__construct($registry, Assign::class);
     }
 
-    public function store($user,$equipment) {
-        $assign = new Assign();
-        $assign->setUser($user);
-        $assign->setEquipment($equipment);
-        $date_assign = new \DateTimeImmutable();
-        $date_assign->format('Y-m-d H:i:s');
-        $due_date = $date_assign->modify('+1 year');
-        $assign->setDateAssign($date_assign);
-        $assign->setDueDate($due_date);
-        $this->getEntityManager()->persist($assign);
+    public function store(Assign $entity) {
+        $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
     }
 

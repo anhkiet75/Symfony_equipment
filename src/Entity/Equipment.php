@@ -14,13 +14,14 @@ use Faker\Generator;
 use Faker\Factory;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Validator\Constraints as Assert;
+use JsonSerializable;
 /**
  * @ORM\Entity(repositoryClass=EquipmentRepository::class)
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
 */
 
-class Equipment
+class Equipment implements JsonSerializable
 {
     use TimestampableEntity;
     use SoftDeleteableEntity;
@@ -201,4 +202,12 @@ class Equipment
         $this->serial_number = $this->faker->ean8;
     }
 
+    public function jsonSerialize() {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        ];
+    }
+
+   
 }

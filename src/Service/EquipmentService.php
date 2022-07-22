@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Classes\Constants;
+use App\Entity\Assign;
 use App\Entity\Equipment;
 use App\Repository\EquipmentRepository;
 use App\Repository\UserRepository;
@@ -44,6 +45,28 @@ class EquipmentService extends AbstractController
 
     public function getHistory(Equipment $entity) {
         return $this->equipmentRepository->getHistory($entity);
+    }
+
+    public function findByID($id) {
+        return $this->equipmentRepository->findByID($id);
+    }
+
+    public function search($value) {
+        $results = $this->equipmentRepository->search($value);
+        return $results;
+//         $output="";
+//         if($results)
+//         {
+//             foreach ($results as $key => $result) {
+//             $output.='<tr>'.
+//             '<td>'.$result->id.'</td>'.
+//             '<td>'.$result->title.'</td>'.
+//             '<td>'.$result->description.'</td>'.
+//             '<td>'.$result->price.'</td>'.
+//             '</tr>';
+//         }
+//         }
+
     }
 
     public function create(Request $request,$form) {
@@ -100,10 +123,28 @@ class EquipmentService extends AbstractController
             $equipment = $this->equipmentRepository->findOne($id);
             $user_id = $request->request->get('user_id');
             $user = $this->userRepository->findOne($user_id);
+            $due_date = date_create($request->request->get('due_date'));
+            
+            $assign = new Assign();
+            $assign->setUser($user);
+            $assign->setEquipment($equipment);
+            $date_assign = new \DateTimeImmutable();
+            $date_assign->format('Y-m-d H:i:s');
+            // $due_date = $date_assign->modify('+1 year');
+            $assign->setDateAssign($date_assign);
+            $assign->setDueDate($due_date);
 
-            $this->assignRepository->store($user,$equipment);
-            $this->equipmentRepository->setStatus($equipment,Constants::STATUS_IN_USE);
-            $this->addFlash('success','Equipment assigned');
+            $errors = $this->validator->validate($assign);
+
+            if (count($errors) > 0) {
+                $errorsString = (string) $errors;
+                $this->addFlash('failed',$errorsString);
+            }
+            else {
+                $this->assignRepository->store($assign);
+                $this->equipmentRepository->setStatus($equipment,Constants::STATUS_IN_USE);
+                $this->addFlash('success','Equipment assigned');
+            }      
         }
         else $this->addFlash('failed','Unable to assign');
     }
