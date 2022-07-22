@@ -21,7 +21,7 @@ use JsonSerializable;
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
 */
 
-class Equipment
+class Equipment implements JsonSerializable
 {
     use TimestampableEntity;
     use SoftDeleteableEntity;
@@ -200,6 +200,13 @@ class Equipment
     {  
         $this->faker = Factory::create();
         $this->serial_number = $this->faker->ean8;
+    }
+
+    public function jsonSerialize() {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        ];
     }
 
    

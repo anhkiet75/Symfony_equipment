@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classes\Constants;
 use App\Entity\Assign;
+use App\Service\CategoryService;
 use App\Service\EquipmentService;
 use App\Service\UserService;
 use App\Repository\EquipmentRepository;
@@ -18,7 +19,8 @@ use App\Repository\AssignRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/equipment')]
 class EquipmentController extends AbstractController
@@ -34,12 +36,14 @@ class EquipmentController extends AbstractController
     function __construct(
     EquipmentService $equipmentService
     , UserService $userService
+    , CategoryService $categoryService
     , RequestStack  $session
     )
 
     {
         $this->equipmentService = $equipmentService;
         $this->userService = $userService;
+        $this->categoryService = $categoryService;
         $this->session = $session->getSession();
     }
 
@@ -50,10 +54,11 @@ class EquipmentController extends AbstractController
         $equipments = $this->equipmentService->getAll();
 
         $users = $this->userService->getAll();
-    
+        $categories = $this->categoryService->getAll();
         return $this->render('equipment/index.html.twig', [
             'equipments' => $equipments,
             'users' => $users,
+            'categories' => $categories,
             'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
         ]);
     }
@@ -124,14 +129,38 @@ class EquipmentController extends AbstractController
         return $this->redirectToRoute('app_equipment_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/api/search_user', name: 'app_equipment_search_user', methods: ['GET'])]
-    public function search_user(Request $request): Response
+    #[Route('/api/search', name: 'app_equipment_search', methods: ['GET'])]
+    public function search(Request $request)
     {
-        $name = $request->query->get('value');
-        if ($name) {
-            $result = $this->userRepository->findByName($name);
-            return $this->json($result);
+        $value = $request->query->get('value');
+        if ($value) {
+            $result = $this->equipmentService->search($value);
+            $users = $this->userService->getAll();
+            // return $this->json(["success" => $result]);
+            return $this->render('equipment/search.html.twig',[
+                'equipments' => $result,
+                'users' => $users,
+                'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
+            ]);
         }
-        return $this->json($name);
+        return $this->json(["failed" => "Not accepted"]);
     }
+
+    #[Route('/api/filter', name: 'app_equipment_filter', methods: ['GET'])]
+    public function filter(Request $request)
+    {
+        $id = $request->query->get('id');
+        if ($id) {
+            $result = $this->equipmentService->findByID($id);
+            $users = $this->userService->getAll();
+            return $this->render('equipment/search.html.twig',[
+                'equipments' => $result,
+                'users' => $users,
+                'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
+            ]);
+        }
+        return $this->json(["failed" => "Not accepted"]);
+    }
+
+
 }

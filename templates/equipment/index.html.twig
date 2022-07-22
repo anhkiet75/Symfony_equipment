@@ -10,35 +10,37 @@
 			Create
 		</a>
 	</div>
-	<div>
 
-		{# {% if success %}
-			<div class="alert alert-success alert-dismissible fade show" role="alert" data-mdb-color="warning">
-				{{ success }}
-				<button
-					type="button"
-					class="btn-close"
-					data-mdb-dismiss="alert"
-					aria-label="Close"
-				></button>
-			</div>
-			
-		{% endif %}
+	<div class="d-flex">	
+		<div style="width: 400px">
+			<form class="d-none d-md-flex input-group w-auto my-auto" action="#">
+				<input autocomplete="off" type="search" class="form-control rounded" placeholder='Search ID or Serial Number' style="min-width: 250px" name="id" id="searchtable" />
+				<button type="submit" class="btn btn-primary">
+					<i class="fas fa-search"></i>
+				</button>
+			</form>
+		</div>
 
-		{% if error %}
-			{% for message in error %}
-				<div class="alert alert-danger alert-dismissible fade show" role="alert" data-mdb-color="warning">
-				{{ message }}
-				<button
-					type="button"
-					class="btn-close"
-					data-mdb-dismiss="alert"
-					aria-label="Close"
-				></button>
-			</div>
-			{% endfor %}
-		{% endif %} #}
+		<div class="dropdown ml-2">
+			<button
+				class="btn btn-primary dropdown-toggle"
+				type="button"
+				id="dropdownMenuButton"
+				data-mdb-toggle="dropdown"
+				aria-expanded="false"
+			>
+				Filter
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				{% for category in categories %}
+					<li>
+						<a class="dropdown-item categoryFilter" href="#" data-id={{category.id}}>{{category.name}}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
 	</div>
+	
 	<table class="table">
 		<thead class="table-dark">
 			<tr>
@@ -137,6 +139,7 @@
 
 												<div class="form-group">
 													<label for="formDueDate" class="form-label">Due Date</label>
+													<br>
 													<input id="dueDate" type="date" name="due_date">
 													<br>
 													<label id ="date-label" for="formDueDate" class="form-label" style="color:red"></label>
@@ -157,22 +160,16 @@
 													<button type="submit" class="btn btn-dark" id="modalAssign">Assign</button>
 												</div>
 										   </form>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					{% endif %}
+						{% endif %}
+					</td>
 				</tr>
-			</td>
+			{% endfor %}
 		</tbody>
-	</tr>
-{% else %}
-	<tr>
-		<td colspan="6">no records found</td>
-	</tr>
-{% endfor %}
-</tbody>
-</table>
+	</table>
 
 <style>
 * { box-sizing: border-box; }
@@ -370,30 +367,38 @@ input[type=submit] {
 				})
 			})
 
-			$('.searchassign').on('keyup', function() {
+			$('#searchtable').on('keyup', function() {
 			 	$value = $(this).val();
 				var token = $(this).data('token');
 				console.log($value);
 				$.ajax({
 					type: 'get',
-					url: '{{ (path("app_equipment_search_user")) }}',
+					url: '{{ (path("app_equipment_search")) }}',
 					data: {
 						'value': $value
 					},
 					success: function(data) {
+						$('tbody').html(data);
 						console.log(data)
-						 $('.formAssignUser')
-							.find('option')
-							.remove()
-							.end()
-						data.forEach((element) => {
-							$('.formAssignUser')
-							.append($('<option>')
-								.val(element.id).text(element.name));
-						})
 					}
 				});	
   	  		})
+
+			$('.categoryFilter').click(function () {
+				$id = $(this).data('id');
+				console.log($id);
+				$.ajax({
+					type: 'get',
+					url: '{{ (path("app_equipment_filter")) }}',
+					data: {
+						'id': $id
+					},
+					success: function(data) {
+						$('tbody').html(data);
+						console.log(data)
+					}
+				});	
+			})
 		});
 	</script>
 

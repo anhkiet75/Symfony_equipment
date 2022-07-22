@@ -47,6 +47,28 @@ class EquipmentService extends AbstractController
         return $this->equipmentRepository->getHistory($entity);
     }
 
+    public function findByID($id) {
+        return $this->equipmentRepository->findByID($id);
+    }
+
+    public function search($value) {
+        $results = $this->equipmentRepository->search($value);
+        return $results;
+//         $output="";
+//         if($results)
+//         {
+//             foreach ($results as $key => $result) {
+//             $output.='<tr>'.
+//             '<td>'.$result->id.'</td>'.
+//             '<td>'.$result->title.'</td>'.
+//             '<td>'.$result->description.'</td>'.
+//             '<td>'.$result->price.'</td>'.
+//             '</tr>';
+//         }
+//         }
+
+    }
+
     public function create(Request $request,$form) {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

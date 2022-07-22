@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use JsonSerializable;
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\HasLifecycleCallbacks()
@@ -31,6 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     private $id;
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email(
+     *   message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $email;
     /**
@@ -51,15 +55,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     private $assigns;
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotBlank
      */
     private $gender;
     /**
      * @ORM\Column(type="date")
+     * @Assert\Date
      */
     private $birthdate;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $name;
     public function __construct()
