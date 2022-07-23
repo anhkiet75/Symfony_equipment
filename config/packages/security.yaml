@@ -21,12 +21,12 @@ security:
             custom_authenticator: App\Security\LoginFormAuthenticator
             entry_point: App\Security\AuthenticationEntryPoint
             access_denied_handler: App\Security\AccessDeniedHandler
-            # form_login:
-            #     login_path: app_login
-            #     check_path: app_login
+            form_login:
+                login_path: app_login
+                check_path: app_login
             logout:
                 path: app_logout
-                target: home
+                target: app_login
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -40,8 +40,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
           - { path: ^/login, roles: PUBLIC_ACCESS }
-          - { path: ^/logout, roles:  [ROLE_ADMIN, ROLE_USER] }
           - { path: ^/register, roles: PUBLIC_ACCESS }
+          - { path: ^/logout, roles:  [ROLE_ADMIN, ROLE_USER] }
           - { path: ^/(css/js), roles: PUBLIC_ACCESS }
           - { path: ^/category, roles: ROLE_ADMIN }
           - { path: ^/equipment, roles: ROLE_ADMIN }

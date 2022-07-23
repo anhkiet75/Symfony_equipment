@@ -14,7 +14,7 @@
 	<div class="d-flex">	
 		<div style="width: 400px">
 			<form class="d-none d-md-flex input-group w-auto my-auto" action="#">
-				<input autocomplete="off" type="search" class="form-control rounded" placeholder='Search ID or Serial Number' style="min-width: 250px" name="id" id="searchtable" />
+				<input autocomplete="off" type="search" class="form-control rounded" placeholder='Search ...' style="min-width: 250px" name="id" id="searchtable" />
 				<button type="submit" class="btn btn-primary">
 					<i class="fas fa-search"></i>
 				</button>
@@ -228,14 +228,16 @@ input[type=submit] {
 	<script>
 				
 		window.addEventListener('DOMContentLoaded', (event) => {
-			
+			//autcomplete when you search user
+			// prepare data for autocomplete
 			var temp = {{ users | json_encode() | raw }}
 			var users = []
 			var arr_index = []
 			temp.forEach(function(value,index) {
-				users[index] = value.name
-				arr_index[index] = value.id
+				users[index] = value.name // array save username
+				arr_index[index] = value.id // array savev user id
 			})
+
 			function autocomplete(inp, arr) {
 				/*the autocomplete function takes two arguments,
 				the text field element and an array of possible autocompleted values:*/
@@ -336,7 +338,7 @@ input[type=submit] {
 					closeAllLists(e.target);
 				});
 			}
-	
+			// autocomplete when you search user	
 			autocomplete(document.getElementById("myInput"), users);
 
 			const btnAssign = $('.button-assign')
@@ -367,10 +369,25 @@ input[type=submit] {
 				})
 			})
 
-			$('#searchtable').on('keyup', function() {
+			// ajax rate-limit request
+			function throttle(func, wait) {
+				var timeout;
+				return function() {
+					var context = this, args = arguments;
+					if (!timeout) {
+						timeout = setTimeout(function() {
+							timeout = null;
+							func.apply(context, args);
+						}, wait);
+					}
+				}
+			}
+
+
+			// livesearching equipment
+			$('#searchtable').on('keyup', throttle(function() {
 			 	$value = $(this).val();
 				var token = $(this).data('token');
-				console.log($value);
 				$.ajax({
 					type: 'get',
 					url: '{{ (path("app_equipment_search")) }}',
@@ -379,12 +396,14 @@ input[type=submit] {
 					},
 					success: function(data) {
 						$('tbody').html(data);
-						console.log(data)
+						//console.log(data)
 					}
 				});	
-  	  		})
-
-			$('.categoryFilter').click(function () {
+				//console.log($value);
+  	  		},700))
+		
+			/// filter equipment by category
+			$('.categoryFilter').click( throttle(function () {
 				$id = $(this).data('id');
 				console.log($id);
 				$.ajax({
@@ -398,7 +417,9 @@ input[type=submit] {
 						console.log(data)
 					}
 				});	
-			})
+			},300))
+
+
 		});
 	</script>
 

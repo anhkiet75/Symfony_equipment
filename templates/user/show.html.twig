@@ -3,6 +3,12 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
+
+	{% for message in app.flashes('note') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+    {% endfor %}
     <h1>User</h1>
 
     <table class="table">
@@ -10,6 +16,10 @@
             <tr>
                 <th>Id</th>
                 <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ user.name }}</td>
             </tr>
             <tr>
                 <th>Email</th>
@@ -22,10 +32,6 @@
             <tr>
                 <th>Birthdate</th>
                 <td>{{ user.birthdate ? user.birthdate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ user.name }}</td>
             </tr>
         </tbody>
     </table>
