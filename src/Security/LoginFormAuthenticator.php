@@ -5,6 +5,8 @@ namespace App\Security;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Cookie as HttpFoundationCookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,10 +62,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $jwttoken = $this->jwtManager->create($this->security->getUser());
         error_log($jwttoken);
 
+        $cookie = new HttpFoundationCookie('jwt', $jwttoken, time() + 36000);
+        $response = new RedirectResponse($this->urlGenerator->generate('app_user_show',['id' => $this->security->getUser()->getId()], UrlGeneratorInterface::ABSOLUTE_URL));
+        $response->headers->setCookie($cookie);
+        return $response;
+
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
         // return new RedirectResponse($this->urlGenerator->generate('home'));
-        return new RedirectResponse($this->urlGenerator->generate('app_user_show',['id' => $this->security->getUser()->getId()], UrlGeneratorInterface::ABSOLUTE_URL));
 
         // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }

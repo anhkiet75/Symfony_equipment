@@ -130,7 +130,7 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
     }
 
     #[Route('/api/search', name: 'app_equipment_search', methods: ['GET'])]
-    public function search(Request $request)
+    public function api_search(Request $request)
     {
         $value = $request->query->get('value');
         if ($value) {
@@ -147,7 +147,7 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
     }
 
     #[Route('/api/filter', name: 'app_equipment_filter', methods: ['GET'])]
-    public function filter(Request $request)
+    public function api_filter(Request $request)
     {
         $id = $request->query->get('id');
         if ($id) {

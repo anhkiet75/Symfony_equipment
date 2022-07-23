@@ -395,9 +395,13 @@ input[type=submit] {
 						'value': $value
 					},
 					success: function(data) {
-						$('tbody').html(data);
+						console.log(data.success);
+						if (data.success && data.success === false) {
+							$('tbody').html(data.message);
+						}
+						else $('tbody').html(data);
 						//console.log(data)
-					}
+					},
 				});	
 				//console.log($value);
   	  		},700))
@@ -413,8 +417,11 @@ input[type=submit] {
 						'id': $id
 					},
 					success: function(data) {
-						$('tbody').html(data);
-						console.log(data)
+						console.log(data.success)
+						if (data.success && data.success === false) {
+							$('tbody').html(data.message);
+						}
+						else $('tbody').html(data);
 					}
 				});	
 			},300))
