@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/equipment')]
-class EquipmentController extends AbstractController
+class EquipmentController extends AbstractController implements TokenAuthenticatedController
 {
     private $em;
     private $equipmentRepository;
@@ -161,6 +161,5 @@ class EquipmentController extends AbstractController
         }
         return $this->json(["failed" => "Not accepted"]);
     }
-
 
 }

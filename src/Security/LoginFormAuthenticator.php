@@ -2,6 +2,9 @@
 
 namespace App\Security;
 
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +26,14 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, Security $security)
+    private $jwtManager;
+    private $security;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, Security $security, JWTEncoderInterface $encoder, EventDispatcherInterface $dispatcher)
     {
         $this->urlGenerator = $urlGenerator;
         $this->security = $security;
+        $this->jwtManager = new JWTManager($encoder, $dispatcher);
     }
 
     public function authenticate(Request $request): Passport
@@ -49,6 +56,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+
+        $jwttoken = $this->jwtManager->create($this->security->getUser());
+        error_log($jwttoken);
 
         // For example:
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
