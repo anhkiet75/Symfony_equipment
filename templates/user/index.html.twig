@@ -25,8 +25,12 @@
                 <td>{{ user.gender ? 'Male' : 'Female' }}</td>
                 <td>{{ user.birthdate ? user.birthdate|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-rounded btn-dark">
+                    <i class="fa-solid fa-eye"></i>
+                    SHOW</a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-rounded btn-dark">
+                    <i class="far fa-edit fa-fw editor"></i>
+                    EDIT</a>
                 </td>
             </tr>
         {% else %}

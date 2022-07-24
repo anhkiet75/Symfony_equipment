@@ -78,6 +78,7 @@ class EquipmentRepository extends ServiceEntityRepository
     }
 
     public function search($value) {
+        if (empty($value)) return $this->findAll();
         return $this->createQueryBuilder('e')
         ->where('e.name LIKE :name')
         ->setParameter('name', '%'.$value.'%')
