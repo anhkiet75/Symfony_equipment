@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Classes\Constants;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\CategoryService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,10 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 
-    private UserService $userService;
+    private  $userService;
+    private  $categoryService;
 
-    function __construct(UserService $userService) {
+    function __construct(UserService $userService, CategoryService $categoryService ) {
         $this->userService = $userService;
+        $this->categoryService = $categoryService;
     }
 
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
@@ -53,9 +57,10 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user_show', ['id' => $this->getUser()->getId()]);
         }
         $equipments = $this->userService->getListEquipment($user);
-
+        $categoies = $this->categoryService->getAll();
         return $this->render('user/show.html.twig', [
             'equipments' => $equipments,
+            'categories' => $categoies,
             'user' => $user,
         ]);
     }
@@ -82,4 +87,36 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/api/search', name: 'app_user_search', methods: ['GET'])]
+    public function api_search(Request $request)
+    {
+        $value = $request->query->get('value');
+        if ($value) {
+            $result = $this->userService->search($value);
+            $users = $this->userService->getAll();
+            return $this->render('user/search.html.twig',[
+                'equipments' => $result,
+                'users' => $users,
+                'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
+            ]);
+        }
+        return $this->json(["failed" => "Not accepted"]);
+    }
+
+    #[Route('/api/filter', name: 'app_user_filter', methods: ['GET'])]
+    public function api_filter(Request $request)
+    {
+        $id = $request->query->get('id');
+        if ($id) {
+            $result = $this->userService->filterByCategory($id);
+            // dd($result);
+            $users = $this->userService->getAll();
+            return $this->render('user/search.html.twig',[
+                'equipments' => $result,
+                'users' => $users,
+                'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
+            ]);
+        }
+        return $this->json(["failed" => "Not accepted"]);
+    }
 }

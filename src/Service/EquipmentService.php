@@ -47,6 +47,7 @@ class EquipmentService extends AbstractController
         return $this->equipmentRepository->getHistory($entity);
     }
 
+
     public function findByID($id) {
         return $this->equipmentRepository->findByID($id);
     }
@@ -66,7 +67,6 @@ class EquipmentService extends AbstractController
 //             '</tr>';
 //         }
 //         }
-
     }
 
     public function create(Request $request,$form) {

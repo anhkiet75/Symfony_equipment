@@ -9,9 +9,24 @@
                 {{ message }}
             </div>
     {% endfor %}
-    <h1>User</h1>
 
-    <table class="table">
+    <div class="accordion" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+            <button
+                class="accordion-button"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+            >
+                <h1 style="color: black">User</h1>
+            </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-mdb-parent="#accordionExample">
+            <div class="accordion-body">
+                 <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -35,11 +50,45 @@
             </tr>
         </tbody>
     </table>
+            </div>
+            </div>
+        </div>
+    </div>
+
    
    <h3>Equipment</h3>
+   	<div class="d-flex">	
+		<div style="width: 400px" class="me-2">
+			<form class="d-none d-md-flex input-group w-auto my-auto" action="#">
+				<input autocomplete="off" type="search" class="form-control rounded" placeholder='Search ...' style="min-width: 250px" name="id" id="searchtable" />
+				<button type="submit" class="btn btn-dark searchSubmitBtn">
+					<i class="fas fa-search"></i>
+				</button>
+			</form>
+		</div>
+
+		<div class="dropdown">
+			<button
+				class="btn btn-dark dropdown-toggle"
+				type="button"
+				id="dropdownMenuButton"
+				data-mdb-toggle="dropdown"
+				aria-expanded="false"
+			>
+				Filter
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				{% for category in categories %}
+					<li>
+						<a class="dropdown-item categoryFilter" href="#" data-id={{category.id}}>{{category.name}}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
     {% if equipments %}
 	<table class="table">
-		 <thead>
+		 <thead class="table-dark">
 			<tr>
 				<th>Id</th>
 				<th>Serial_number</th>
@@ -83,4 +132,79 @@
     {{ include('user/_delete_form.html.twig') }}
     {% endif %}
 	{% endif %}
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+	
+		window.addEventListener('DOMContentLoaded', (event) => {
+    
+	// ajax rate-limit request
+			function throttle(func, wait) {
+				var timeout;
+				return function() {
+					var context = this, args = arguments;
+					if (!timeout) {
+						timeout = setTimeout(function() {
+							timeout = null;
+							func.apply(context, args);
+						}, wait);
+					}
+				}
+			}
+
+
+			// livesearching equipment
+			$('.searchSubmitBtn').on('click', function(e) {
+				e.preventDefault();
+			})
+			$('.searchSubmitBtn').on('click', throttle(function() {
+				
+				let inputSearch = $('#searchtable')
+			 	$value = inputSearch.val();
+				console.log(inputSearch);
+				var token = inputSearch.data('token');
+				if ($value) {
+					$.ajax({
+						type: 'get',
+						url: '{{ (path("app_user_search")) }}',
+						data: {
+							'value': $value
+						},
+						success: function(data) {
+							console.log(data);
+							if (data.success && data.success === false) {
+								$('tbody').html(data.message);
+							}
+							else $('tbody').html(data);
+							//console.log(data)
+						},
+					});	
+				}
+				//console.log($value);
+  	  		},500))
+		
+			/// filter equipment by category
+			$('.categoryFilter').click( throttle(function () {
+				$id = $(this).data('id');
+				console.log($id);
+				$.ajax({
+					type: 'get',
+					url: '{{ (path("app_user_filter")) }}',
+					data: {
+						'id': $id
+					},
+					success: function(data) {
+						console.log(data.success)
+						if (data.success && data.success === false) {
+							$('tbody').html(data.message);
+						}
+						else $('tbody').html(data);
+					}
+				});	
+			},300))
+        })
+</script>
+
 {% endblock %}

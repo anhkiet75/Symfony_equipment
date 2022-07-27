@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Classes\Constants;
 use App\Entity\User;
+use App\Repository\EquipmentRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -17,16 +18,27 @@ class UserService extends AbstractController
 {
     private $userRepository;
     private $session;
+    private $equipmentRepository;
     private $validator; 
     
-    public function __construct(UserRepository $userRepository, RequestStack  $session,ValidatorInterface $validator) {
+    public function __construct(UserRepository $userRepository,EquipmentRepository $equipmentRepository, RequestStack  $session,ValidatorInterface $validator) {
         $this->userRepository = $userRepository;
+        $this->equipmentRepository = $equipmentRepository;
         $this->session = $session->getSession();
         $this->validator = $validator;
     }
 
     public function getAll() {
         return $this->userRepository->getAll();
+    }
+
+    public function search($id) {
+        return $this->userRepository->search($id);
+    }
+
+
+    public function filterByCategory($id) {
+        return $this->userRepository->filterByCategory($id);
     }
 
     public function getListEquipment(User $entity) {

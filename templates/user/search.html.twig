@@ -1,0 +1,24 @@
+	{% for equipment in equipments %}
+				<tr>
+					<td>{{ equipment.id }}</td>
+					<td>{{ equipment.serialNumber }}</td>
+					<td>{{ equipment.name }}</td>
+					<td>{{ equipment.description }}</td>
+					<td>{{ equipment.status }}</td>
+				
+					<td>{{ equipment.category.name }}</td>
+
+					{% if equipment.getStatus() == STATUS_IN_USE %}
+						<td>
+							{{ equipment.getLastAssign() ? equipment.getLastAssign().getDateAssign()|date('d-m-Y'): "" }}
+						</td>
+						<td>
+							{{ equipment.getLastAssign() ? equipment.getLastAssign().getDueDate()|date('d-m-Y'): "" }}
+						</td>
+					{% else %}
+						<td>...</td>
+						<td>...</td>
+					{% endif  %}
+			</tr>
+
+    {% endfor %}

@@ -147,7 +147,7 @@ class Equipment implements JsonSerializable
     public function getLastUser()
     {
         $criteria = Criteria::create()
-        ->orderBy(['updatedAt' => 'DESC'])
+        ->orderBy(['date_assign' => 'DESC'])
         ->setMaxResults(1);
 
         $result = $this->assigns->matching($criteria);
@@ -157,7 +157,7 @@ class Equipment implements JsonSerializable
     public function getLastAssign()
     {
         $criteria = Criteria::create()
-        ->orderBy(['updatedAt' => 'DESC'])
+        ->orderBy(['date_assign' => 'DESC'])
         ->setMaxResults(1);
 
         $result = $this->assigns->matching($criteria);

@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use App\Classes\Constants;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -20,9 +21,12 @@ use App\Classes\Constants;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+
+    private $security;
+    public function __construct(ManagerRegistry $registry,   Security $security)
     {
         parent::__construct($registry, User::class);
+        $this->security = $security;
     }
 
     public function add(User $entity, bool $flush = false): void
@@ -64,6 +68,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ->setParameter('name', '%'.$value.'%')
         ->getQuery()
         ->getResult();
+    }
+
+    public function filterByCategory($id) {
+        $user = $this->security->getUser();
+        $equipments = $this->getListEquipment($user);
+        $result = array_filter($equipments, function($value, $item) use ($id) {
+            return $value->getCategory()->getId() == $id;
+        },ARRAY_FILTER_USE_BOTH);
+        return $result;
+    }
+
+    public function search($string) {
+        $user = $this->security->getUser();
+        $equipments = $this->getListEquipment($user);
+        $result = array_filter($equipments, function($value, $item) use ($string) {
+            return str_contains($value->getName(),$string);
+            // return $value->getCategory()->getId() == $string;
+        },ARRAY_FILTER_USE_BOTH);
+        return $result; 
     }
 
     public function findOne($id) {
