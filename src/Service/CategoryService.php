@@ -13,20 +13,32 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Knp\Component\Pager\PaginatorInterface;
 
 class CategoryService extends AbstractController
 {
     private $categoryRepository;
+    private $paginator;
     private $validator; 
     
-    public function __construct(CategoryRepository $categoryRepository,ValidatorInterface $validator) {
+    public function __construct(PaginatorInterface $paginator, CategoryRepository $categoryRepository,ValidatorInterface $validator) {
         $this->categoryRepository = $categoryRepository;
         $this->validator = $validator;
+        $this->paginator = $paginator;
+
     }
 
     public function getAll() {
         return $this->categoryRepository->getAll();
     }
+
+    public function getAllPaginate(Request $request) {
+        $result = $this->categoryRepository->getAll();
+        return $this->paginator->paginate(
+            $result, $request->query->getInt('page', 1), 10 
+        );
+    }
+
 
     public function getList(Category $entity) {
         return $this->categoryRepository->getList($entity);

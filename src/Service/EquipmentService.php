@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+use Knp\Component\Pager\PaginatorInterface;
 
 class EquipmentService extends AbstractController
 {
@@ -25,18 +26,27 @@ class EquipmentService extends AbstractController
     private $equipmentRepository;
     private $session;
     private $validator; 
+    private $paginator;
     
-    public function __construct(UserRepository $userRepository, AssignRepository $assignRepository,EquipmentRepository $equipmentRepository,RequestStack  $session,ValidatorInterface $validator) {
+    public function __construct(PaginatorInterface $paginator,UserRepository $userRepository, AssignRepository $assignRepository,EquipmentRepository $equipmentRepository,RequestStack  $session,ValidatorInterface $validator) {
 
         $this->userRepository = $userRepository;
         $this->assignRepository = $assignRepository;
         $this->equipmentRepository = $equipmentRepository;
         $this->session = $session->getSession();
         $this->validator = $validator;
+        $this->paginator = $paginator;
     }
 
     public function getAll() {
-        return $this->equipmentRepository->getAll();
+       return $this->userRepository->getAll();
+    }
+
+    public function getAllPaginate(Request $request) {
+        $result = $this->equipmentRepository->getAll();
+        return $this->paginator->paginate(
+            $result, $request->query->getInt('page', 1), 10 
+        );
     }
 
     public function findOne($id) {
@@ -52,9 +62,14 @@ class EquipmentService extends AbstractController
         return $this->equipmentRepository->findByID($id);
     }
 
-    public function search($value) {
+    public function search($value, $request) {
         $results = $this->equipmentRepository->search($value);
-        return $results;
+        return $this->paginator->paginate(
+            $results, $request->query->getInt('page', 1), 10
+        );
+        // return $results;
+
+
 //         $output="";
 //         if($results)
 //         {

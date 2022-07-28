@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 class UserService extends AbstractController
@@ -20,16 +21,25 @@ class UserService extends AbstractController
     private $session;
     private $equipmentRepository;
     private $validator; 
+    private $paginator;
     
-    public function __construct(UserRepository $userRepository,EquipmentRepository $equipmentRepository, RequestStack  $session,ValidatorInterface $validator) {
+    public function __construct(PaginatorInterface $paginator, UserRepository $userRepository,EquipmentRepository $equipmentRepository, RequestStack  $session,ValidatorInterface $validator) {
         $this->userRepository = $userRepository;
         $this->equipmentRepository = $equipmentRepository;
         $this->session = $session->getSession();
         $this->validator = $validator;
+        $this->paginator = $paginator;
     }
 
     public function getAll() {
         return $this->userRepository->getAll();
+    }
+
+    public function getAllPaginate($request) {
+        $result = $this->userRepository->getAll();
+        return $this->paginator->paginate(
+            $result, $request->query->getInt('page', 1), 10 
+        );
     }
 
     public function search($id) {

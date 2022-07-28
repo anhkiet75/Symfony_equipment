@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
-
+use Knp\Component\Pager\PaginatorInterface;
 #[Route('/equipment')]
 class EquipmentController extends AbstractController implements TokenAuthenticatedController
 {
@@ -33,6 +33,7 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
     private $userService;
     private $categoryService;
     private $session;
+    private $paginator;
     function __construct(
     EquipmentService $equipmentService
     , UserService $userService
@@ -48,13 +49,13 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
     }
 
     #[Route('/', name: 'app_equipment_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        // $equipments = $this->equipmentRepository->findAll();
-        $equipments = $this->equipmentService->getAll();
+        $equipments = $this->equipmentService->getAllPaginate($request);
 
         $users = $this->userService->getAll();
         $categories = $this->categoryService->getAll();
+
         return $this->render('equipment/index.html.twig', [
             'equipments' => $equipments,
             'users' => $users,
@@ -132,18 +133,33 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
     #[Route('/api/search', name: 'app_equipment_search', methods: ['GET'])]
     public function api_search(Request $request)
     {
+        if ($request->isXmlHttpRequest()) {
         $value = $request->query->get('value');
         if ($value) {
-            $result = $this->equipmentService->search($value);
+            $result = $this->equipmentService->search($value,$request);
             $users = $this->userService->getAll();
-            // return $this->json(["success" => $result]);
-            return $this->render('equipment/search.html.twig',[
+            $table  =  $this->renderView('equipment/search.html.twig',[
                 'equipments' => $result,
                 'users' => $users,
                 'STATUS_IN_USE' =>  Constants::STATUS_IN_USE
             ]);
+
+            $paginator = $this->renderView('equipment/paginator.html.twig',[
+                'equipments' => $result,
+            ]);
+
+            return new JsonResponse([
+                'success' => true , 
+                'data' => $table, 
+                'equipments' => $result,
+                'paginator' => $paginator
+            ]);
         }
-        return $this->json(["failed" => "Not accepted"]);
+        return $this->json(["sucess" => false , "message" => "Not accepted"]);
+        }
+        return $this->json(["sucess" => false , "message" => "Not accepted"]);
+
+
     }
 
     #[Route('/api/filter', name: 'app_equipment_filter', methods: ['GET'])]

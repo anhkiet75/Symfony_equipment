@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+
 	<div class="d-flex justify-content-between align-items-center">
 		<h1>Equipment index</h1>
 		<a href="{{ path('app_equipment_new') }}" class="btn btn-outline-dark py-auto" style="width: 130px;">
@@ -171,6 +172,11 @@
 		</tbody>
 	</table>
 
+	<div class="paginator">
+    	{{ knp_pagination_render(equipments) }}
+	</div>
+	
+
 <style>
 * { box-sizing: border-box; }
 body {
@@ -226,8 +232,8 @@ input[type=submit] {
 
 {% block scripts %}
 	<script>
-				
 		window.addEventListener('DOMContentLoaded', (event) => {
+
 			//autcomplete when you search user
 			// prepare data for autocomplete
 			var temp = {{ users | json_encode() | raw }}
@@ -416,8 +422,13 @@ input[type=submit] {
 							if (data.success && data.success === false) {
 								$('tbody').html(data.message);
 							}
-							else $('tbody').html(data);
-							//console.log(data)
+							else 
+							{
+								$('tbody').html(data.data);
+								$('.paginator').html(data.paginator);
+							
+								console.log(data.paginator);
+							}
 						},
 					});	
 				}

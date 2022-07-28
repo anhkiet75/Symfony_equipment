@@ -101,7 +101,7 @@
 			</tr>
 		</thead>
           
-	    <tbody>
+	    <tbody class="tableBody">
                 {% for equipment in equipments %}
                 <tr>
                     <td>{{ equipment.id }}</td>
@@ -175,9 +175,9 @@
 						success: function(data) {
 							console.log(data);
 							if (data.success && data.success === false) {
-								$('tbody').html(data.message);
+								$('.tableBody').html(data.message);
 							}
-							else $('tbody').html(data);
+							else $('.tableBody').html(data);
 							//console.log(data)
 						},
 					});	
@@ -198,9 +198,9 @@
 					success: function(data) {
 						console.log(data.success)
 						if (data.success && data.success === false) {
-							$('tbody').html(data.message);
+							$('.tableBody').html(data.message);
 						}
-						else $('tbody').html(data);
+						else $('.tableBody').html(data);
 					}
 				});	
 			},300))

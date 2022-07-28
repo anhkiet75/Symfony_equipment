@@ -16,7 +16,7 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="tableBody">
         {% for user in users %}
             <tr>
                 <td>{{ user.id }}</td>
@@ -40,6 +40,9 @@
         {% endfor %}
         </tbody>
     </table>
+
+    {{ knp_pagination_render(users) }}
+
 
     {# <a href="{{ path('app_user_new') }}">Create new</a> #}
 {% endblock %}
