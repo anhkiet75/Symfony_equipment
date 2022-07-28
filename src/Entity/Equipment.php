@@ -51,7 +51,6 @@ class Equipment implements JsonSerializable
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(choices = {"IN_USE", "AVAILABLE"}, message = "Choose a valid status.")
      */
     private $status;
 

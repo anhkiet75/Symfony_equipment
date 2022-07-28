@@ -49,6 +49,10 @@ class EquipmentService extends AbstractController
         );
     }
 
+    public function countEquipmentByCategory() {
+        return $this->equipmentRepository->countEquipmentByCategory();
+    }
+
     public function findOne($id) {
         return $this->equipmentRepository->findOne($id);
     }

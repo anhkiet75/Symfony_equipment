@@ -82,6 +82,15 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
         ]);
     }
 
+    #[Route('/request', name: 'app_equipment_request', methods: ['GET'])]
+    public function request(Request $requeset)
+    {
+        $count = $this->equipmentService->countEquipmentByCategory();
+        return $this->render('equipment/request.html.twig', [
+            'count' => $count,
+        ]);
+    }
+
     #[Route('/{id}', name: 'app_equipment_show', methods: ['GET'])]
     public function show(Equipment $equipment): Response
     {
@@ -91,6 +100,7 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
             'histories' => $history,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_equipment_edit', methods: ['GET', 'POST'])]
     public function edit($id,Request $request): Response

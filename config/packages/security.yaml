@@ -51,6 +51,7 @@ security:
           - { path: ^/logout, roles:  [ROLE_ADMIN, ROLE_USER] }
           - { path: ^/(css/js), roles: PUBLIC_ACCESS }
           - { path: ^/category, roles: ROLE_ADMIN }
+          - { path: ^/equipment/request, roles: [ROLE_ADMIN, ROLE_USER] }
           - { path: ^/equipment, roles: ROLE_ADMIN }
           - { path: ^/user/\d+$, roles: [ROLE_ADMIN, ROLE_USER] }
           - { path: ^/user/, roles: ROLE_ADMIN}

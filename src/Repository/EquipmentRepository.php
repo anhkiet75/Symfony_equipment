@@ -27,6 +27,21 @@ class EquipmentRepository extends ServiceEntityRepository
         return $this->find($id);
     }
 
+    public function countEquipmentByCategory() {
+        $qb = $this->createQueryBuilder('e')
+                   ->join('e.category', 'c')
+                   ->where('e.status = :avai')
+                   ->setParameter('avai','AVAILABLE')
+                   ->select('c.name AS CategoryName')
+                   ->addSelect('count(e.id) as Count')
+                   ->addSelect('c.description AS Description')
+                   ->groupBy('c.id')
+                   ->getQuery();
+        $result = $qb->getResult();
+        dd($result);    
+        return $result;
+    }
+
     public function findByID($id) {
         return $this->findBy(['category' => $id]);
         // return $this->find($id) ;

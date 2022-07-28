@@ -74,15 +74,26 @@
 								<i class="fas fa-chart-area fa-fw me-3"></i>
 								<span>Equipment</span>
 							</a>
-							<a href="/user" class="rounded list-group-item list-group-item-action py-2 ripple
-																						          {# {{ Route::currentRouteNamed('web.user.index') ? 'active' : '' }} #}
-																							{{ 'app_user' in app.request.attributes.get('_route') ? 'active' }}
-																						          ">
+							<a href="/user" class="rounded list-group-item list-group-item-action py-2 ripple {{ 'app_user' in app.request.attributes.get('_route') ? 'active' }} ">
 								<i class="fas fa-users fa-fw me-3"></i>
 								<span>User</span>
 							</a>
 						</div>
+					{% else %}
+						<div class="list-group list-group-flush mx-3 mt-2">
+							<a href="/user/{{app.user.id}}" class="px-2 rounded list-group-item list-group-item-action ripple {{ 'app_user_show' in app.request.attributes.get('_route') ? 'active' }} ">
+								<i class="fas fa-users fa-fw me-3"></i>
+								<span>My info</span>
+							</a>
+						</div>
+						<div class="list-group list-group-flush mx-3 mt-2">
+							<a href="/equipment/request" class="px-2 rounded list-group-item list-group-item-action py-2 ripple {{ 'app_equipment_request' in app.request.attributes.get('_route') ? 'active' }} ">
+								<i class="fas fa-users fa-fw me-3"></i>
+								<span>Request equipment</span>
+							</a>
+						</div>
 					{% endif %}
+
 				{% endif %}
 			</div>
 		</nav>
@@ -181,11 +192,11 @@
 		{# <script>
 			var darkSwitch=document.getElementById("darkSwitch");window.addEventListener("load",(function(){if(darkSwitch){initTheme();darkSwitch.addEventListener("change",(function(){resetTheme()}))}}));function initTheme(){var darkThemeSelected=localStorage.getItem("darkSwitch")!==null&&localStorage.getItem("darkSwitch")==="dark";darkSwitch.checked=darkThemeSelected;darkThemeSelected?document.body.setAttribute("data-theme","dark"):document.body.removeAttribute("data-theme")}function resetTheme(){if(darkSwitch.checked){document.body.setAttribute("data-theme","dark");localStorage.setItem("darkSwitch","dark")}else{document.body.removeAttribute("data-theme");localStorage.removeItem("darkSwitch")}}
 		</script> #}
-			
+{# 			
 		  <script>
       document.querySelector("#darkSwitch").onclick = function(e){
         darkmode.toggleDarkMode();
       }
-    </script>
+    </script> #}
 	</body>
 </html>
