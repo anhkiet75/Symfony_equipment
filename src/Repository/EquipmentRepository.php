@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Equipment;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,14 +33,22 @@ class EquipmentRepository extends ServiceEntityRepository
                    ->join('e.category', 'c')
                    ->where('e.status = :avai')
                    ->setParameter('avai','AVAILABLE')
-                   ->select('c.name AS CategoryName')
-                   ->addSelect('count(e.id) as Count')
-                   ->addSelect('c.description AS Description')
+                   ->select('c.name AS name')
+                   ->addSelect('c.id AS id')
+                   ->addSelect('count(e.id) as count')
+                   ->addSelect('c.description AS description')
                    ->groupBy('c.id')
                    ->getQuery();
         $result = $qb->getResult();
-        dd($result);    
         return $result;
+    }
+
+    public function checkRequestEquipment() {
+
+    }
+
+    public function requestEquipment($user,$category) {
+        
     }
 
     public function findByID($id) {

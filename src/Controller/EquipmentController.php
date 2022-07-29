@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Classes\Constants;
 use App\Entity\Assign;
+use App\Entity\Category;
 use App\Service\CategoryService;
 use App\Service\EquipmentService;
 use App\Service\UserService;
@@ -85,11 +86,21 @@ class EquipmentController extends AbstractController implements TokenAuthenticat
     #[Route('/request', name: 'app_equipment_request', methods: ['GET'])]
     public function request(Request $requeset)
     {
-        $count = $this->equipmentService->countEquipmentByCategory();
+        // index show equipment available 
+        $equipments = $this->equipmentService->countEquipmentByCategory();
         return $this->render('equipment/request.html.twig', [
-            'count' => $count,
+            'equipments' => $equipments,
         ]);
     }
+
+    #[Route('/request/{id}', name: 'app_equipment_request_action', methods: ['GET'])]
+    public function requestAction(Category $category)
+    {
+        // set status when request equipment
+        $this->equipmentService->requestEquipment($category);
+        return $this->redirectToRoute('app_equipment_request', [], Response::HTTP_SEE_OTHER);
+    }
+
 
     #[Route('/{id}', name: 'app_equipment_show', methods: ['GET'])]
     public function show(Equipment $equipment): Response

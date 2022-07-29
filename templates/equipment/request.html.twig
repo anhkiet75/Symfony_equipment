@@ -1,0 +1,39 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Request Equipment
+{% endblock %}
+
+{% block body %}
+
+	<table class="table">
+		<thead class="table-dark">
+			<tr>
+				<th>Id</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Count</th>
+				<th>Status</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for equipment in equipments %}
+				<tr>
+					<td>{{ equipment.id }}</td>
+					<td>{{ equipment.name }}</td>
+					<td>{{ equipment.description }}</td>
+					<td>{{ equipment.count }}</td>
+					<td>SPENDING</td>
+					<td class="d-flex align-items-center ">
+						<a href="{{ path('app_equipment_request_action', {'id': equipment.id}) }}" class="btn btn-rounded btn-dark">
+                        <i class="fa-regular fa-hand"></i>
+							REQUEST</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
+
+

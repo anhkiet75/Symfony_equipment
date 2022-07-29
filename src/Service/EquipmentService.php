@@ -53,6 +53,11 @@ class EquipmentService extends AbstractController
         return $this->equipmentRepository->countEquipmentByCategory();
     }
 
+    public function requestEquipment($category) {
+        $user = $this->getUser();
+        $this->equipmentRepository->requestEquipment($user, $category);
+    }
+
     public function findOne($id) {
         return $this->equipmentRepository->findOne($id);
     }
