@@ -39,9 +39,9 @@
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 
 		{# dark mode #}
-		{# <link rel="stylesheet" href="/dark-mode.css"> #}
+		<link rel="stylesheet" href="/dark-mode.css">
 		
-    	{# <script src="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/js/darkmode.min.js"></script> #}
+    	<script src="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/js/darkmode.min.js"></script>
    		{# <link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap.min.css" rel="stylesheet" media="(prefers-color-scheme: light)"> #}
    		{# <link href="https://cdn.jsdelivr.net/npm/bootstrap-dark-5@1.1.3/dist/css/bootstrap-night.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)"> #}
    
@@ -127,10 +127,10 @@
 							</h4>
 							
 							{# Toggle dark mode #}
-							{# <div class="custom-control custom-switch">
+							<div class="custom-control custom-switch">
 								<input type="checkbox" class="custom-control-input" id="darkSwitch">
 								<label class="custom-control-label" for="darkSwitch">Dark Mode</label>
-							</div> #}
+							</div>
 
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
@@ -189,9 +189,9 @@
 		</main>
 		<!--Main layout-->
 		<!-- MDB -->
-		{# <script>
+		<script>
 			var darkSwitch=document.getElementById("darkSwitch");window.addEventListener("load",(function(){if(darkSwitch){initTheme();darkSwitch.addEventListener("change",(function(){resetTheme()}))}}));function initTheme(){var darkThemeSelected=localStorage.getItem("darkSwitch")!==null&&localStorage.getItem("darkSwitch")==="dark";darkSwitch.checked=darkThemeSelected;darkThemeSelected?document.body.setAttribute("data-theme","dark"):document.body.removeAttribute("data-theme")}function resetTheme(){if(darkSwitch.checked){document.body.setAttribute("data-theme","dark");localStorage.setItem("darkSwitch","dark")}else{document.body.removeAttribute("data-theme");localStorage.removeItem("darkSwitch")}}
-		</script> #}
+		</script>
 {# 			
 		  <script>
       document.querySelector("#darkSwitch").onclick = function(e){
