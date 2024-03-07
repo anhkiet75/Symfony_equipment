@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Equipment index
+{% endblock %}
+
+{% block body %}
+	<div class="d-flex justify-content-between align-items-center">
+		<h1>Equipment index</h1>
+		<a href="{{ path('app_equipment_new') }}" class="btn btn-outline-dark py-auto" style="width: 130px;">
+			Create
+		</a>
+	</div>
+	<table class="table">
+		<thead class="table-dark">
+			<tr>
+				<th>Id</th>
+				<th>Serial_number</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Status</th>
+				<th>User</th>
+				<th>Category</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for equipment in equipments %}
+				<tr>
+					<td>{{ equipment.id }}</td>
+					<td>{{ equipment.serialNumber }}</td>
+					<td>{{ equipment.name }}</td>
+					<td>{{ equipment.description }}</td>
+					<td>{{ equipment.status }}</td>
+					<td>
+
+						{% if equipment.getStatus() == STATUS_IN_USE %}
+							{{ equipment.getLastUser() ? equipment.getLastUser().getName(): "" }}
+						{% else %}
+							<span class="text-danger">
+								Not assign
+							</span>
+						{% endif  %}
+					</td>
+					<td>{{ equipment.category.name }}</td>
+					<td class="d-flex align-items-center ">
+						<a href="{{ path('app_equipment_show', {'id': equipment.id}) }}" class="btn btn-rounded btn-dark">
+							<i class="fa-solid fa-eye"></i>
+							SHOW</a>
+						<a href="{{ path('app_equipment_edit', {'id': equipment.id}) }} " class="btn btn-rounded btn-dark">
+							<i class="far fa-edit fa-fw editor"></i>
+							EDIT</a>
+						{% if equipment.getStatus() == STATUS_IN_USE %}
+							{# <a href="{{ path('app_equipment_unassign', {'id': equipment.id}) }} " class="btn btn-danger"> #}
+
+							<form method="post" action="{{ path('app_equipment_unassign', {'id': equipment.id}) }}" onsubmit="return confirm('Are you sure you want to Unassign this item?');" style="height: 36px">
+								<input type="hidden" name="_token" value="{{ csrf_token('unassign' ~ equipment.id) }}">
+								<button class="btn btn-light btn-rounded px-3">
+									<i class="fa-solid fa-user-slash"></i>
+									UNASSIGN
+								</button>
+							</form>
+
+							{# </a> #}
+
+						{% else %}
+							{# <a href="{{ path('app_equipment_edit', {'id': equipment.id}) }} ">
+																						<i class="fa-solid fa-user-check" style="color: #000"></i>
+																						ASSIGN</a> #}
+
+							<!-- Button trigger Assign modal -->
+							<button type="button" class="btn btn-dark btn-rounded button-assign" data-mdb-toggle="modal" data-mdb-target="#assignModal"> <i class="fa-solid fa-user-check"></i>
+								ASSIGN
+							</button>
+
+							<!-- Assign Modal -->
+							<div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="assignModalLabel">Assign User</h5>
+											<button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<form action="{{ path('app_equipment_assign', {'id': equipment.id}) }}" method="post" id="formAssign">
+											
+												<input type="hidden" name="_token" value="{{ csrf_token('assign' ~ equipment.id) }}">
+												<div class="form-group">
+												<label for="formAssignUser" class="form-label">User</label>
+												<input autocomplete="off" type="search" class="form-control rounded searchassign" placeholder='Search ID or User Name' style="min-width: 250px" id="searchUpdate"
+												{# data-token="{{ csrf_token() }}" #}
+												></input>
+													<select class="form-select formAssignUser" id="formAssignUser" aria-label="Default select example" name="user_id">
+														{% for user in users %}
+														<option value="{{user.id}}">{{user.id}} {{user.name}}</option>
+														{% endfor %}
+													</select>
+												</div>
+
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+												<button type="submit" class="btn btn-primary" id="modalAssign">Assign</button>
+											</div>
+										   </form>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				</tr>
+			</td>
+		</tbody>
+	</tr>
+{% else %}
+	<tr>
+		<td colspan="6">no records found</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		window.addEventListener('DOMContentLoaded', (event) => {
+
+			const btnAssign = $('.button-assign')
+			btnAssign.click(function() {
+				let btnModelAssign = $("#modalAssign")
+				let formAssign = $("#formAssign")
+				btnModelAssign.on("click", function(e) {
+					e.preventDefault();
+					name = $('#formAssignName').val()
+					label = $('#label-form-assign')
+					if (name === "") label.text("The name field is required.")
+					if (name)
+						formAssign.submit();
+				})
+			})
+
+
+			$('.searchassign').on('keyup', function() {
+			 	$value = $(this).val();
+				var token = $(this).data('token');
+				console.log($value);
+				$.ajax({
+					type: 'get',
+					url: '{{ (path("app_equipment_search_user")) }}',
+					data: {
+						'value': $value
+					},
+					success: function(data) {
+						console.log(data)
+						 $('.formAssignUser')
+							.find('option')
+							.remove()
+							.end()
+						data.forEach((element) => {
+							$('.formAssignUser')
+							.append($('<option>')
+								.val(element.id).text(element.name));
+						})
+					}
+				});	
+      })
+		});
+	</script>
+
+{% endblock %}
